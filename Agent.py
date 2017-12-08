@@ -115,7 +115,7 @@ class HumanAgent(Agent):
         game.displayBoard()
         turn = input("please enter your move in the format <row> <column>: ").split()
         turn = [int(x) for x in turn]
-        return turn
+        return tuple(turn)
 
     def wasInvalidTurn(self, game, turn):
         print("your input '{}' is invalid".format(turn))
