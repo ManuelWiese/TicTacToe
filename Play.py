@@ -11,8 +11,9 @@ class Play:
         self.player1 = player1
         self.player2 = player2
 
-    def playGame(self):
-        game = Game()
+    def playGame(self, firstTurn=1):
+        assert firstTurn == 1 or firstTurn == 2
+        game = Game(firstTurn)
 
         while game.getGameState() == Game.ONGOING:
             if game.getTurn() == 1:
@@ -23,7 +24,7 @@ class Play:
             turn = currentPlayer.makeTurn(game)
             try:
                 game.makeTurn(turn)
-            except InvalidMoveError:
+            except:
                 currentPlayer.wasInvalidTurn(game, turn)
 
         return game
