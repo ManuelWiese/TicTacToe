@@ -1,3 +1,4 @@
+import random
 from Play import Play
 from Game import Game
 import Agent
@@ -16,7 +17,7 @@ class Statistics:
         finalGameStates = [0, 0, 0, 0, 0]
 
         for i in range(numberOfGames):
-            game = play.playGame()
+            game = play.playGame(random.choice([1, 2]))
             finalGameStates[game.getGameState()] += 1
 
         return finalGameStates

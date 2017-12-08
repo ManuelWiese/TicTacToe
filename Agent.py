@@ -20,6 +20,86 @@ class RandomAgent(Agent):
         return random.choice(choices)
 
 
+class DecisionTreeAgent(Agent):
+
+    TIE, PLAYER_1_WINS, PLAYER_2_Wins = range(3)
+
+    @staticmethod
+    def allElementsEqual(someList):
+        if len(someList) == 0:
+            return True
+
+        firstElement = someList[0]
+        for element in someList:
+            if element != firstElement:
+                return False
+
+        return True
+
+    def __init__(self, playerNumber):
+        super().__init__(playerNumber)
+        self.gameConfigurationToWinPrediction = {}
+
+    def winPrediction(self, game):
+        gameConfiguration = (game.getState(), game.getTurn())
+        if gameConfiguration in self.gameConfigurationToWinPrediction:
+            return self.gameConfigurationToWinPrediction[gameConfiguration]
+
+        gameState = game.getGameState()
+        if gameState != Game.ONGOING:
+            if gameState == Game.TIE:
+                return DecisionTreeAgent.TIE
+            return gameState
+
+        choices = game.getValidMoves()
+        predictions = []
+
+        for choice in choices:
+            newGame = game.copy()
+            newGame.makeTurn(choice)
+
+            predictions.append(self.winPrediction(newGame))
+
+        if game.getTurn() in predictions:
+            prediction = game.getTurn()
+        elif DecisionTreeAgent.allElementsEqual(predictions) and predictions[0] != DecisionTreeAgent.TIE:
+            prediction = predictions[0]
+        else:
+            prediction = DecisionTreeAgent.TIE
+
+        self.gameConfigurationToWinPrediction.update({gameConfiguration: prediction})
+
+        return prediction
+
+    def makeTurn(self, game):
+        prediction = self.winPrediction(game)
+        choices = game.getValidMoves()
+
+        for choice in choices:
+            newGame = game.copy()
+            newGame.makeTurn(choice)
+            if self.winPrediction(newGame) == prediction:
+                return choice
+
+        # predictions = []
+        # for choice in choices:
+        #     newGame = game.copy()
+        #     newGame.makeTurn(choice)
+        #     predictions.append(self.winPrediction(newGame))
+        #
+        # bestChoiceIndex = 0
+        # if game.getTurn() == prediction:
+        #     # find any winning move
+        #     bestChoiceIndex = predictions.index(prediction)
+        # if prediction == DecisionTreeAgent.TIE:
+        #     # find best tie move
+        #     bestChoiceIndex = predictions.index(prediction)
+        # else:
+        #     # find best losing move
+        #     bestChoiceIndex = predictions.index(prediction)
+        #
+        # return choices[bestChoiceIndex]
+
 class BruteForceAgent(Agent):
 
     def __init__(self, playerNumber):
@@ -115,7 +195,7 @@ class HumanAgent(Agent):
         game.displayBoard()
         turn = input("please enter your move in the format <row> <column>: ").split()
         turn = [int(x) for x in turn]
-        return turn
+        return tuple(turn)
 
     def wasInvalidTurn(self, game, turn):
         print("your input '{}' is invalid".format(turn))

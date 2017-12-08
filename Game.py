@@ -1,4 +1,3 @@
-import random
 from InvalidMoveError import InvalidMoveError
 from CheckArgs import checkIntBetween
 from CheckArgs import checkTuple
@@ -149,12 +148,12 @@ class Game:
             Game.boards.append(Game.calculateBoardFromState(state))
             Game.gameStates.append(Game.stateToGameState(state))
 
-    def __init__(self):
+    def __init__(self, firstTurn=1):
         if len(Game.boards) == 0:
             Game.loadGamestates()
 
         self.state = 0
-        self.firstTurn = random.choice([1, 2])
+        self.firstTurn = firstTurn
         self.turn = self.firstTurn
 
     def copy(self):
