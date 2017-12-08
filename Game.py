@@ -178,6 +178,16 @@ class Game:
     def getGameState(self):
         return Game.gameStates[self.state]
 
+    def getValidMoves(self):
+        board = self.getBoard()
+        validMoves = []
+        for row in range(len(board)):
+            for column in range(len(board[row])):
+                if board[row][column] == 0:
+                    validMoves.append((row, column))
+
+        return validMoves
+
     def makeTurn(self, cell):
         assert checkTuple(cell, int, 2)
         assert checkIntBetween(cell[0], 0, Game.size[0])

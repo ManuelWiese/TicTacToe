@@ -12,22 +12,11 @@ class Agent:
     def wasInvalidTurn(self, game, turn):
         print("Invalid move")
 
-    @staticmethod
-    def getChoices(board):
-        choices = []
-        for row in range(len(board)):
-            for column in range(len(board[row])):
-                if board[row][column] == 0:
-                    choices.append((row, column))
-
-        return choices
-
 
 class RandomAgent(Agent):
 
     def makeTurn(self, game):
-        choices = RandomAgent.getChoices(game.getBoard())
-
+        choices = game.getValidMoves()
         return random.choice(choices)
 
 
@@ -50,7 +39,7 @@ class BruteForceAgent(Agent):
                 return [0, 1, 0]
             return [0, 0, 1]
 
-        choices = BruteForceAgent.getChoices(game.getBoard())
+        choices = game.getValidMoves()
         rates = [0, 0, 0]
 
         for choice in choices:
@@ -69,7 +58,7 @@ class BruteForceAgent(Agent):
         return rates
 
     def makeTurn(self, game):
-        choices = BruteForceAgent.getChoices(game.getBoard())
+        choices = game.getValidMoves()
 
         rates = []
         for choice in choices:
