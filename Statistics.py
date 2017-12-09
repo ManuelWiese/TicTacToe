@@ -23,8 +23,8 @@ class Statistics:
         return finalGameStates
 
 if __name__ == "__main__":
-    player1 = Agent.BruteForceAgentMaximizeWins(1)
-    player2 = Agent.BruteForceAgentBalanced(2, 0.2, -0.1, 0.1)
+    player1 = Agent.RandomAgent(1)
+    player2 = Agent.DecisionTreeAgent(2)
 
     statistics = Statistics(player1, player2)
 

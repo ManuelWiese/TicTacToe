@@ -12,6 +12,9 @@ class Agent:
     def wasInvalidTurn(self, game, turn):
         print("Invalid move")
 
+    def endOfGame(self, game):
+        pass
+
 
 class RandomAgent(Agent):
 
@@ -199,3 +202,14 @@ class HumanAgent(Agent):
 
     def wasInvalidTurn(self, game, turn):
         print("your input '{}' is invalid".format(turn))
+        print("Valid moves: {}".format(game.getValidMoves()))
+
+    def endOfGame(self, game):
+        if game.getGameState() == Game.TIE:
+            print("Game is tied")
+        elif game.getGameState() == Game.WIN1:
+            print("Player 1 wins")
+        elif game.getGameState() == Game.WIN2:
+            print("Player 2 wins")
+
+        game.displayBoard()

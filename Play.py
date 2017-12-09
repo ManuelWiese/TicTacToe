@@ -27,4 +27,7 @@ class Play:
             except:
                 currentPlayer.wasInvalidTurn(game, turn)
 
+        self.player1.endOfGame(game)
+        self.player2.endOfGame(game)
+        
         return game
