@@ -204,7 +204,6 @@ class Game:
 
     def displayBoard(self):
         board = Game.stateToBoard(self.state)
-        print("Playerturn: {}".format(self.turn))
         for row in board:
             print("|", end='')
             for cell in row:

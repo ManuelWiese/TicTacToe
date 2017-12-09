@@ -195,6 +195,7 @@ class BruteForceAgentBalanced(BruteForceAgent):
 class HumanAgent(Agent):
 
     def makeTurn(self, game):
+        print("Player {}, it's your turn".format(game.getTurn()))
         game.displayBoard()
         turn = input("please enter your move in the format <row> <column>: ").split()
         turn = [int(x) for x in turn]
