@@ -29,15 +29,7 @@ class DecisionTreeAgent(Agent):
 
     @staticmethod
     def allElementsEqual(someList):
-        if len(someList) == 0:
-            return True
-
-        firstElement = someList[0]
-        for element in someList:
-            if element != firstElement:
-                return False
-
-        return True
+        return len(set(someList)) <= 1
 
     def __init__(self, playerNumber):
         super().__init__(playerNumber)
