@@ -3,6 +3,41 @@ from CheckArgs import checkIntBetween
 from CheckArgs import checkTuple
 
 
+class State:
+    ONGOING, PLAYER1_WON, PLAYER2_WON, TIED = range(4)
+
+    @staticmethod
+    def createOngoing():
+        return State(State.ONGOING)
+
+    @staticmethod
+    def createPlayer1Won():
+        return State(State.PLAYER1_WON)
+
+    @staticmethod
+    def createPlayer2Won():
+        return State(State.PLAYER2_WON)
+
+    @staticmethod
+    def createTied():
+        return State(State.TIED)
+
+    def __init__(self, gameState):
+        self.gameState = gameState
+
+    def isOngoing(self):
+        return self.gameState == State.ONGOING
+
+    def isTied(self):
+        return self.gameState == State.TIED
+
+    def player1Won(self):
+        return self.gameState == State.PLAYER1_WON
+
+    def player2Won(self):
+        return self.gameState == State.PLAYER2_WON
+
+
 class Game:
 
     size = (3, 3)
@@ -134,12 +169,12 @@ class Game:
 
                 if consecutive >= Game.winSize:
                     if marker == 1:
-                        return Game.WIN1
-                    return Game.WIN2
+                        return State.createPlayer1Won()
+                    return State.createPlayer2Won()
 
         if hasFreeCell:
-            return Game.ONGOING
-        return Game.TIE
+            return State.createOngoing()
+        return State.createTied()
 
     @staticmethod
     def loadGamestates():

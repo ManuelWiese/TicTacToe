@@ -15,7 +15,7 @@ class Play:
         assert firstTurn == 1 or firstTurn == 2
         game = Game(firstTurn)
 
-        while game.getGameState() == Game.ONGOING:
+        while game.getGameState().isOngoing():
             if game.getTurn() == 1:
                 currentPlayer = self.player1
             else:
@@ -29,5 +29,5 @@ class Play:
 
         self.player1.endOfGame(game)
         self.player2.endOfGame(game)
-        
+
         return game

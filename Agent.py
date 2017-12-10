@@ -25,7 +25,7 @@ class RandomAgent(Agent):
 
 class DecisionTreeAgent(Agent):
 
-    TIE, PLAYER_1_WINS, PLAYER_2_Wins = range(3)
+    TIE, PLAYER_1_WINS, PLAYER_2_WINS = range(3)
 
     @staticmethod
     def allElementsEqual(someList):
@@ -41,10 +41,13 @@ class DecisionTreeAgent(Agent):
             return self.gameConfigurationToWinPrediction[gameConfiguration]
 
         gameState = game.getGameState()
-        if gameState != Game.ONGOING:
-            if gameState == Game.TIE:
+        if not gameState.isOngoing():
+            if gameState.isTied():
                 return DecisionTreeAgent.TIE
-            return gameState
+            if gameState.player1Won():
+                return DecisionTreeAgent.PLAYER_1_WINS
+            if gameState.player2Won():
+                return DecisionTreeAgent.PLAYER_2_WINS
 
         choices = game.getValidMoves()
         predictions = []
@@ -107,10 +110,10 @@ class BruteForceAgent(Agent):
             return self.cache[cacheKey]
 
         gameState = game.getGameState()
-        if gameState != Game.ONGOING:
-            if gameState == Game.WIN1:
+        if gameState.isOngoing():
+            if gameState.player1Won():
                 return [1, 0, 0]
-            if gameState == Game.WIN2:
+            if gameState.player2Won():
                 return [0, 1, 0]
             return [0, 0, 1]
 
@@ -198,11 +201,11 @@ class HumanAgent(Agent):
         print("Valid moves: {}".format(game.getValidMoves()))
 
     def endOfGame(self, game):
-        if game.getGameState() == Game.TIE:
+        if game.getGameState().isTied():
             print("Game is tied")
-        elif game.getGameState() == Game.WIN1:
+        elif game.getGameState().player1Won():
             print("Player 1 wins")
-        elif game.getGameState() == Game.WIN2:
+        elif game.getGameState().player2Won():
             print("Player 2 wins")
 
         game.displayBoard()
