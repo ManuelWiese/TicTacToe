@@ -1,4 +1,5 @@
 from Game import Game
+from Game import TicTacToe
 import Agent
 from InvalidMoveError import InvalidMoveError
 
@@ -13,7 +14,7 @@ class Play:
 
     def playGame(self, firstTurn=1):
         assert firstTurn == 1 or firstTurn == 2
-        game = Game(firstTurn)
+        game = Game(TicTacToe(), firstTurn)
 
         while game.getGameState().isOngoing():
             if game.getTurn() == 1:

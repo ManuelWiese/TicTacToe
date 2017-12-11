@@ -1,101 +1,195 @@
 from InvalidMoveError import InvalidMoveError
 from CheckArgs import checkIntBetween
 from CheckArgs import checkTuple
+import copy
 
 
-class State:
+class GameState:
     ONGOING, PLAYER1_WON, PLAYER2_WON, TIED = range(4)
 
     @staticmethod
     def createOngoing():
-        return State(State.ONGOING)
+        return GameState(GameState.ONGOING)
 
     @staticmethod
     def createPlayer1Won():
-        return State(State.PLAYER1_WON)
+        return GameState(GameState.PLAYER1_WON)
 
     @staticmethod
     def createPlayer2Won():
-        return State(State.PLAYER2_WON)
+        return GameState(GameState.PLAYER2_WON)
 
     @staticmethod
     def createTied():
-        return State(State.TIED)
+        return GameState(GameState.TIED)
 
     def __init__(self, gameState):
         self.gameState = gameState
 
     def isOngoing(self):
-        return self.gameState == State.ONGOING
+        return self.gameState == GameState.ONGOING
 
     def isTied(self):
-        return self.gameState == State.TIED
+        return self.gameState == GameState.TIED
 
     def player1Won(self):
-        return self.gameState == State.PLAYER1_WON
+        return self.gameState == GameState.PLAYER1_WON
 
     def player2Won(self):
-        return self.gameState == State.PLAYER2_WON
+        return self.gameState == GameState.PLAYER2_WON
 
 
 class Game:
 
+    def __init__(self, gameLogic, firstTurn=1):
+        assert isinstance(gameLogic, GameLogic)
+        self.gameLogic = gameLogic
+        self.firstTurn = firstTurn
+        self.turn = self.firstTurn
+
+    def copy(self):
+        newGame = Game(copy.deepcopy(self.gameLogic), self.firstTurn)
+        newGame.turn = self.turn
+
+        return newGame
+
+    def makeTurn(self, move):
+        if not move in self.gameLogic.getValidMoves():
+            raise InvalidMoveError()
+
+        self.gameLogic.makeTurn(move, self.turn)
+
+        if self.turn == 1:
+            self.turn = 2
+        else:
+            self.turn = 1
+
+    def getTurn(self):
+        return self.turn
+
+    def getGameState(self):
+        return self.gameLogic.getGameState()
+
+    def getValidMoves(self):
+        return self.gameLogic.getValidMoves()
+
+    def getState(self):
+        return hash(self.gameLogic)
+
+    def display(self):
+        self.gameLogic.display()
+
+
+class GameLogic:
+
+    def __init__(self):
+        raise NotImplementedError
+
+    def makeTurn(self, move):
+        raise NotImplementedError
+
+    def getGameState(self):
+        raise NotImplementedError
+
+    def getValidMoves(self):
+        raise NotImplementedError
+
+    def __hash__(self):
+        raise NotImplementedError
+
+    def display(self):
+        raise NotImplementedError
+
+
+class TicTacToe(GameLogic):
+
     size = (3, 3)
     winSize = 3
-
-    ONGOING, WIN1, WIN2, TIE, INVALID = range(5)
 
     markers = [' ', 'x', 'o']
     boards = []
     gameStates = []
+    validMoves = []
 
     numberOfStates = len(markers)**(size[0] * size[1])
 
+    def __init__(self):
+        if len(TicTacToe.boards) == 0:
+            TicTacToe.initStaticLists()
+
+        self.state = 0
+
+    def makeTurn(self, cell, turn):
+        assert checkTuple(cell, int, 2)
+        assert checkIntBetween(cell[0], 0, TicTacToe.size[0])
+        assert checkIntBetween(cell[1], 0, TicTacToe.size[1])
+
+        self.state = TicTacToe.setCell(self.state, cell, turn)
+
+
+    def getGameState(self):
+        return TicTacToe.gameStates[self.state]
+
+    def getValidMoves(self):
+        return TicTacToe.validMoves[self.state]
+
+    def __hash__(self):
+        return self.state
+
+    def display(self):
+        board = TicTacToe.stateToBoard(self.state)
+        for row in board:
+            print("|", end='')
+            for cell in row:
+                print("{}|".format(TicTacToe.markers[cell]), end='')
+            print("")
+
+
     @staticmethod
     def calculateBoardFromState(state):
-        assert checkIntBetween(state, 0, Game.numberOfStates)
+        assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
 
-        board = [[0 for i in range(Game.size[0])] for j in range(Game.size[1])]
+        board = [[0 for i in range(TicTacToe.size[0])] for j in range(TicTacToe.size[1])]
 
-        for j in range(Game.size[1]):
-            for i in range(Game.size[0]):
-                board[i][j] = state % len(Game.markers)
-                state = (state - board[i][j]) // len(Game.markers)
+        for j in range(TicTacToe.size[1]):
+            for i in range(TicTacToe.size[0]):
+                board[i][j] = state % len(TicTacToe.markers)
+                state = (state - board[i][j]) // len(TicTacToe.markers)
 
         return board
 
     @staticmethod
     def stateToBoard(state):
-        assert checkIntBetween(state, 0, Game.numberOfStates)
-        return Game.boards[state]
+        assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
+        return TicTacToe.boards[state]
 
     @staticmethod
     def getCell(state, cell):
-        board = Game.stateToBoard(state)
+        board = TicTacToe.stateToBoard(state)
 
         assert checkTuple(cell, int, 2)
-        assert checkIntBetween(cell[0], 0, Game.size[0])
-        assert checkIntBetween(cell[1], 0, Game.size[1])
+        assert checkIntBetween(cell[0], 0, TicTacToe.size[0])
+        assert checkIntBetween(cell[1], 0, TicTacToe.size[1])
 
         return board[cell[0]][cell[1]]
 
     @staticmethod
     def isEmptyCell(state, cell):
-        return Game.getCell(state, cell) == 0
+        return TicTacToe.getCell(state, cell) == 0
 
     @staticmethod
     def setCell(state, cell, marker):
-        assert checkIntBetween(state, 0, Game.numberOfStates)
+        assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
 
         assert checkTuple(cell, int, 2)
-        assert checkIntBetween(cell[0], 0, Game.size[0])
-        assert checkIntBetween(cell[1], 0, Game.size[1])
+        assert checkIntBetween(cell[0], 0, TicTacToe.size[0])
+        assert checkIntBetween(cell[1], 0, TicTacToe.size[1])
 
         assert checkIntBetween(marker, 0, 3)
 
-        currentValue = Game.getCell(state, cell)
+        currentValue = TicTacToe.getCell(state, cell)
 
-        base = len(Game.markers) ** (cell[1] * Game.size[0] + cell[0])
+        base = len(TicTacToe.markers) ** (cell[1] * TicTacToe.size[0] + cell[0])
 
         state -= base * currentValue
         state += base * marker
@@ -107,8 +201,8 @@ class Game:
 
         assert checkTuple(direction, int, 2)
 
-        board = Game.stateToBoard(state)
-        cellValue = Game.getCell(state, cell)
+        board = TicTacToe.stateToBoard(state)
+        cellValue = TicTacToe.getCell(state, cell)
         counter = 0
 
         if cellValue == 0:
@@ -119,9 +213,9 @@ class Game:
             position[0] += direction[0]
             position[1] += direction[1]
 
-            if position[0] >= Game.size[0] or position[0] < 0:
+            if position[0] >= TicTacToe.size[0] or position[0] < 0:
                 return counter
-            if position[1] >= Game.size[1] or position[1] < 0:
+            if position[1] >= TicTacToe.size[1] or position[1] < 0:
                 return counter
 
             if cellValue != board[position[0]][position[1]]:
@@ -133,18 +227,18 @@ class Game:
     def checkCell(state, cell):
 
         assert checkTuple(cell, int, 2)
-        assert checkIntBetween(cell[0], 0, Game.size[0])
-        assert checkIntBetween(cell[1], 0, Game.size[1])
+        assert checkIntBetween(cell[0], 0, TicTacToe.size[0])
+        assert checkIntBetween(cell[1], 0, TicTacToe.size[1])
 
-        assert checkIntBetween(state, 0, Game.numberOfStates)
+        assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
 
         directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
 
         consecutive = 0
 
         for direction in directions:
-            consecutive = max(Game.checkCellDirection(state, cell, direction)
-                              + Game.checkCellDirection(state, cell,
+            consecutive = max(TicTacToe.checkCellDirection(state, cell, direction)
+                              + TicTacToe.checkCellDirection(state, cell,
                                                         (-1 * direction[0],
                                                          -1 * direction[1]))
                               + 1, consecutive)
@@ -153,94 +247,45 @@ class Game:
 
     @staticmethod
     def stateToGameState(state):
-        assert checkIntBetween(state, 0, Game.numberOfStates)
+        assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
 
         hasFreeCell = False
 
-        for i in range(Game.size[0]):
-            for j in range(Game.size[1]):
-                marker = Game.getCell(state, (i,j))
+        for i in range(TicTacToe.size[0]):
+            for j in range(TicTacToe.size[1]):
+                marker = TicTacToe.getCell(state, (i,j))
 
                 if marker == 0:
                     hasFreeCell = True
                     continue
 
-                consecutive = Game.checkCell(state, (i,j))
+                consecutive = TicTacToe.checkCell(state, (i,j))
 
-                if consecutive >= Game.winSize:
+                if consecutive >= TicTacToe.winSize:
                     if marker == 1:
-                        return State.createPlayer1Won()
-                    return State.createPlayer2Won()
+                        return GameState.createPlayer1Won()
+                    return GameState.createPlayer2Won()
 
         if hasFreeCell:
-            return State.createOngoing()
-        return State.createTied()
+            return GameState.createOngoing()
+        return GameState.createTied()
+
 
     @staticmethod
-    def loadGamestates():
-        states = [i for i in range(Game.numberOfStates)]
+    def initStaticLists():
+        states = [i for i in range(TicTacToe.numberOfStates)]
         for state in states:
-            Game.boards.append(Game.calculateBoardFromState(state))
-            Game.gameStates.append(Game.stateToGameState(state))
+            board = TicTacToe.calculateBoardFromState(state)
+            TicTacToe.boards.append(board)
+            TicTacToe.gameStates.append(TicTacToe.stateToGameState(state))
+            TicTacToe.validMoves.append(TicTacToe.boardToValidMoves(board))
 
-    def __init__(self, firstTurn=1):
-        if len(Game.boards) == 0:
-            Game.loadGamestates()
 
-        self.state = 0
-        self.firstTurn = firstTurn
-        self.turn = self.firstTurn
-
-    def copy(self):
-        newGame = Game()
-
-        newGame.state = self.state
-        newGame.firstTurn = self.firstTurn
-        newGame.turn = self.turn
-
-        return newGame
-
-    def getState(self):
-        return self.state
-
-    def getTurn(self):
-        return self.turn
-
-    def getBoard(self):
-        return Game.stateToBoard(self.state)
-
-    def getGameState(self):
-        return Game.gameStates[self.state]
-
-    def getValidMoves(self):
-        board = self.getBoard()
+    @staticmethod
+    def boardToValidMoves(board):
         validMoves = []
         for row in range(len(board)):
             for column in range(len(board[row])):
                 if board[row][column] == 0:
                     validMoves.append((row, column))
-
         return validMoves
-
-    def makeTurn(self, cell):
-        assert checkTuple(cell, int, 2)
-        assert checkIntBetween(cell[0], 0, Game.size[0])
-        assert checkIntBetween(cell[1], 0, Game.size[1])
-
-        if not Game.isEmptyCell(self.state, cell):
-            raise InvalidMoveError()
-
-        self.state = Game.setCell(self.state, cell, self.turn)
-
-        if self.turn == 1:
-            self.turn = 2
-        else:
-            self.turn = 1
-
-    def displayBoard(self):
-        board = Game.stateToBoard(self.state)
-        for row in board:
-            print("|", end='')
-            for cell in row:
-                print("{}|".format(Game.markers[cell]), end='')
-            print("")

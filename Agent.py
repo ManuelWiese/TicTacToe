@@ -191,7 +191,7 @@ class HumanAgent(Agent):
 
     def makeTurn(self, game):
         print("Player {}, it's your turn".format(game.getTurn()))
-        game.displayBoard()
+        game.display()
         turn = input("please enter your move in the format <row> <column>: ").split()
         turn = [int(x) for x in turn]
         return tuple(turn)
@@ -208,4 +208,4 @@ class HumanAgent(Agent):
         elif game.getGameState().player2Won():
             print("Player 2 wins")
 
-        game.displayBoard()
+        game.display()

@@ -38,7 +38,6 @@ class Simulation:
 
         play = Play(self.player1, self.player2)
         statistics = Statistics()
-        # finalGameStates = [0, 0, 0, 0, 0]
 
         for i in range(numberOfGames):
             game = play.playGame(random.choice([1, 2]))
@@ -54,9 +53,9 @@ class Simulation:
         return statistics
 
 if __name__ == "__main__":
-    player1 = Agent.RandomAgent(1)
+    player1 = Agent.HumanAgent(1)
     player2 = Agent.DecisionTreeAgent(2)
 
     simulation = Simulation(player1, player2)
 
-    print(simulation.simulate(100))
+    print(simulation.simulate(10000))
