@@ -67,6 +67,9 @@ class Game:
     def getTurn(self):
         return self.turn
 
+    def getFirstTurn(self):
+        return self.firstTurn
+
     def getGameState(self):
         return self.gameLogic.getGameState()
 

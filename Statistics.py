@@ -22,6 +22,19 @@ class Statistics:
         else:
             self.tied()
 
+    def getTies(self):
+        return self.__tied
+
+    def getLosses(self, playerNumber):
+        if playerNumber == 1:
+            return self.__player2Won
+        return self.__player1Won
+
+    def getWins(self, playerNumber):
+        if playerNumber == 1:
+            return self.__player1Won
+        return self.__player2Won
+
     def __str__(self):
         output = ("Tied: {}\n".format(self.__tied)
                   + "Player 1 won: {}\n".format(self.__player1Won)

@@ -18,7 +18,7 @@ class Simulation:
         statistics = Statistics()
 
         for i in range(numberOfGames):
-            game = play.playGame(random.choice([1, 2]))
+            game = play.playGame(firstTurn=random.choice([1, 2]))
             gameState = game.getGameState()
 
             statistics.countGameState(gameState)
@@ -26,9 +26,9 @@ class Simulation:
         return statistics
 
 if __name__ == "__main__":
-    player1 = Agent.RandomAgent(1)
-    player2 = Agent.DecisionTreeAgent(2)
+    player1 = Agent.DecisionTreeAgent(1)
+    player2 = Agent.RandomAgent(2)
 
     simulation = Simulation(player1, player2)
 
-    print(simulation.simulate(10000))
+    print(simulation.simulate(100))
