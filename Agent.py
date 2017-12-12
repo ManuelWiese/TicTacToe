@@ -106,7 +106,7 @@ class BruteForceAgent(Agent):
         self.cache = {}
 
     def winProbability(self, game):
-        cacheKey = (game.getState(), game.getFirstTurn())
+        cacheKey = (game.getState(), game.getTurn())
 
         if cacheKey in self.cache:
             return self.cache[cacheKey]
@@ -247,7 +247,7 @@ class MonteCarloAgent(Agent):
         for i, statistic in enumerate(statistics[1:]):
             if statistic.getLosses(self.playerNumber) < statistics[bestStatistic].getLosses(self.playerNumber):
                 if statistic.getWins(self.playerNumber) > statistics[bestStatistic].getWins(self.playerNumber):
-                    bestStatistic = i
+                    bestStatistic = i + 1
 
         self.cache.update({cacheKey: validMoves[bestStatistic]})
 
