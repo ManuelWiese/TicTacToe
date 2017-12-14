@@ -1,13 +1,13 @@
 from Game import Game
 from Game import TicTacToe
-import Agent
+from Agent import Agent
 from InvalidMoveError import InvalidMoveError
 
 
 class Play:
     def __init__(self, player1, player2):
-        assert isinstance(player1, Agent.Agent)
-        assert isinstance(player2, Agent.Agent)
+        assert isinstance(player1, Agent)
+        assert isinstance(player2, Agent)
 
         self.player1 = player1
         self.player2 = player2
@@ -19,13 +19,18 @@ class Play:
         while game.getGameState().isOngoing():
             if game.getTurn() == 1:
                 currentPlayer = self.player1
+                otherPlayer = self.player2
             else:
                 currentPlayer = self.player2
+                otherPlayer = self.player1
 
             turn = currentPlayer.makeTurn(game)
             try:
                 game.makeTurn(turn)
-            except:
+
+                currentPlayer.feedback(game)
+                otherPlayer.feedback(game)
+            except InvalidMoveError:
                 currentPlayer.wasInvalidTurn(game, turn)
 
         self.player1.endOfGame(game)

@@ -82,6 +82,10 @@ class Game:
     def display(self):
         self.gameLogic.display()
 
+    def getHeuristics(self, playerNumber):
+        assert playerNumber == 1 or playerNumber == 2
+        return self.gameLogic.getHeuristics(playerNumber)
+
 
 class GameLogic:
 
@@ -101,6 +105,9 @@ class GameLogic:
         raise NotImplementedError
 
     def display(self):
+        raise NotImplementedError
+
+    def getHeuristics(self, playerNumber):
         raise NotImplementedError
 
 
@@ -146,6 +153,24 @@ class TicTacToe(GameLogic):
             for cell in row:
                 print("{}|".format(TicTacToe.markers[cell]), end='')
             print("")
+
+    def getHeuristics(self, playerNumber):
+
+        gameState = self.getGameState()
+
+        if playerNumber == 1:
+            if gameState.player1Won():
+                return 1
+            if gameState.player2Won():
+                return -1
+
+        if playerNumber == 2:
+            if gameState.player1Won():
+                return -1
+            if gameState.player2Won():
+                return 1
+
+        return 0
 
 
     @staticmethod
