@@ -1,12 +1,9 @@
 from InvalidMoveError import InvalidMoveError
 
-from CheckArgs import checkIntBetween
-from CheckArgs import checkTuple
-
-from GameState import GameState
 from GameLogic import GameLogic
 
 import copy
+
 
 class Game:
 
@@ -25,7 +22,7 @@ class Game:
         return newGame
 
     def makeTurn(self, move):
-        if not move in self.gameLogic.getValidMoves():
+        if move not in self.gameLogic.getValidMoves():
             raise InvalidMoveError()
 
         self.gameLogic.makeTurn(move, self.turn)
