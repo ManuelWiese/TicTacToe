@@ -1,5 +1,5 @@
 from Game import Game
-from Game import TicTacToe
+from TicTacToe import TicTacToe
 from Agents.Agent import Agent
 from InvalidMoveError import InvalidMoveError
 

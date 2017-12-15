@@ -2,6 +2,7 @@ import random
 from Play import Play
 from Game import Game
 
+from Agents.Agent import Agent
 from Agents.RandomAgent import RandomAgent
 from Agents.DecisionTreeAgent import DecisionTreeAgent
 from Agents.BruteForceAgent import *
@@ -15,6 +16,9 @@ from Statistics import Statistics
 
 class Simulation:
     def __init__(self, player1, player2):
+        assert isinstance(player1, Agent)
+        assert isinstance(player2, Agent)
+
         self.player1 = player1
         self.player2 = player2
 
@@ -40,7 +44,7 @@ if __name__ == "__main__":
     simulation = Simulation(player1, player2)
 
     n = 200
-    runs = 1000
+    runs = 100
     for i, epsilon in enumerate([1.0 - k / n for k in range(n + 1)]):
 
         player1.setEpsilon(epsilon)
