@@ -2,14 +2,14 @@ import random
 from Play import Play
 from Game import Game
 
-import Agent
-from RandomAgent import RandomAgent
-from DecisionTreeAgent import DecisionTreeAgent
-from BruteForceAgent import *
-from HumanAgent import HumanAgent
-from MonteCarloAgent import MonteCarloAgent
-from MiniMaxAgent import MiniMaxAgent
-from QLearningAgent import QLearningAgent
+from Agents.RandomAgent import RandomAgent
+from Agents.DecisionTreeAgent import DecisionTreeAgent
+from Agents.BruteForceAgent import *
+from Agents.HumanAgent import HumanAgent
+from Agents.MonteCarloAgent import MonteCarloAgent
+from Agents.MiniMaxAgent import MiniMaxAgent
+from Agents.QLearningAgent import QLearningAgent
+
 from Statistics import Statistics
 
 
@@ -35,7 +35,7 @@ class Simulation:
 
 if __name__ == "__main__":
     player1 = QLearningAgent(1, 0.5, 1, 1.0)
-    player2 = MiniMaxAgent(2, 9)
+    player2 = RandomAgent(2)
 
     simulation = Simulation(player1, player2)
 

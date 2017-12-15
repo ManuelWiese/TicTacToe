@@ -1,4 +1,4 @@
-from Agent import Agent
+from Agents.Agent import Agent
 import random
 from Statistics import Statistics
 

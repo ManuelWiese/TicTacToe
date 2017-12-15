@@ -1,5 +1,5 @@
+from Agents.Agent import Agent
 import sys
-from Agent import Agent
 
 class MiniMaxAgent(Agent):
     def __init__(self, playerNumber, depth):
