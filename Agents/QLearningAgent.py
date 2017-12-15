@@ -32,24 +32,6 @@ class QLearningAgent(Agent):
 
         return move
 
-
-    def feedback(self, game):
-        if self.lastMove is None:
-            return
-
-        # AFTER opponents turn or after agents turn when finished
-        if game.getTurn() == self.playerNumber or not game.getGameState().isOngoing():
-            reward = game.getHeuristics(self.playerNumber)
-
-            if game.getState() in self.Q:
-                Qstate = self.Q[game.getState()]
-                optimalFutureValue = max(Qstate.values())
-            else:
-                optimalFutureValue = 0
-
-            self.Q[self.lastState][self.lastMove] = ((1 - self.learningRate) * self.Q[self.lastState][self.lastMove]
-                                                     + self.learningRate * (reward + self.discountFactor * optimalFutureValue))
-
     def getQ(self, game):
         state = game.getState()
 
@@ -62,6 +44,28 @@ class QLearningAgent(Agent):
         self.Q.update({state : tmpDir})
         return self.Q[state]
 
+
+    def feedbackAfterOpponentsTurn(self, game):
+        self.updateQ(game)
+
+
+    def updateQ(self, game):
+        if self.lastMove is None:
+            return
+
+        reward = game.getHeuristics(self.playerNumber)
+
+        if game.getState() in self.Q:
+            Qstate = self.Q[game.getState()]
+            optimalFutureValue = max(Qstate.values())
+        else:
+            optimalFutureValue = 0
+
+        self.Q[self.lastState][self.lastMove] = ((1 - self.learningRate) * self.Q[self.lastState][self.lastMove]
+                                                 + self.learningRate * (reward + self.discountFactor * optimalFutureValue))
+
     def endOfGame(self, game):
+        self.updateQ(game)
+
         self.lastMove = None
         self.lastState = None

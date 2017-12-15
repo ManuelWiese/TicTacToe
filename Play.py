@@ -28,8 +28,7 @@ class Play:
             try:
                 game.makeTurn(turn)
 
-                currentPlayer.feedback(game)
-                otherPlayer.feedback(game)
+                otherPlayer.feedbackAfterOpponentsTurn(game)
             except InvalidMoveError:
                 currentPlayer.wasInvalidTurn(game, turn)
 

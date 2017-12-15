@@ -7,7 +7,7 @@ class Agent:
     def makeTurn(self, game):
         pass
 
-    def feedback(self, game):
+    def feedbackAfterOpponentsTurn(self, game):
         pass
 
     def wasInvalidTurn(self, game, turn):
