@@ -24,8 +24,8 @@ class Play:
                 currentPlayer = self.player2
                 otherPlayer = self.player1
 
-            turn = currentPlayer.makeTurn(game)
             try:
+                turn = currentPlayer.makeTurn(game)
                 game.makeTurn(turn)
 
                 otherPlayer.feedbackAfterOpponentsTurn(game)

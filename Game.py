@@ -12,6 +12,8 @@ class Game:
 
     def __init__(self, gameLogic, firstTurn=1):
         assert isinstance(gameLogic, GameLogic)
+        assert isinstance(firstTurn, int)
+
         self.gameLogic = gameLogic
         self.firstTurn = firstTurn
         self.turn = self.firstTurn
