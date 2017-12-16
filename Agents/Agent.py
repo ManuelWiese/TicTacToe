@@ -1,11 +1,10 @@
 
 class Agent:
-    def __init__(self, playerNumber):
-        assert playerNumber == 1 or playerNumber == 2
-        self.playerNumber = playerNumber
+    def __init__(self):
+        self.playerNumber = None
 
     def makeTurn(self, game):
-        pass
+        self.playerNumber = game.getTurn()
 
     def feedbackAfterOpponentsTurn(self, game):
         pass

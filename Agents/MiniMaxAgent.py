@@ -2,8 +2,8 @@ from Agents.Agent import Agent
 import sys
 
 class MiniMaxAgent(Agent):
-    def __init__(self, playerNumber, depth):
-        super().__init__(playerNumber)
+    def __init__(self, depth):
+        super().__init__()
         self.depth = depth
         self.cache = {}
 
@@ -37,6 +37,8 @@ class MiniMaxAgent(Agent):
 
 
     def makeTurn(self, game):
+        super().makeTurn(game)
+
         validMoves = game.getValidMoves()
 
         bestMove = validMoves[0]

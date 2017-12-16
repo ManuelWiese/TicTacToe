@@ -4,6 +4,8 @@ from InvalidMoveError import InvalidMoveError
 class HumanAgent(Agent):
 
     def makeTurn(self, game):
+        super().makeTurn(game)
+
         print("Player {}, it's your turn".format(game.getTurn()))
         game.display()
         turn = input("please enter your move in the format <row> <column>: ").split()

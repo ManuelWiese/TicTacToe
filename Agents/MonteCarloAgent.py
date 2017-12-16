@@ -3,8 +3,8 @@ import random
 from Statistics import Statistics
 
 class MonteCarloAgent(Agent):
-    def __init__(self, playerNumber, numberOfGames):
-        super().__init__(playerNumber)
+    def __init__(self, numberOfGames):
+        super().__init__()
         self.numberOfGames = numberOfGames
         self.cache = {}
 
@@ -16,7 +16,9 @@ class MonteCarloAgent(Agent):
         return game
 
     def makeTurn(self, game):
-        cacheKey = (game.getState(), game.getFirstTurn())
+        super().makeTurn(game)
+
+        cacheKey = (game.getState(), game.getTurn())
         if cacheKey in self.cache:
             return self.cache[cacheKey]
 

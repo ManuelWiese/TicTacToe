@@ -4,7 +4,6 @@ from Play import Play
 from Agents.Agent import Agent
 from Agents.RandomAgent import RandomAgent
 from Agents.DecisionTreeAgent import DecisionTreeAgent
-from Agents.BruteForceAgent import *
 from Agents.HumanAgent import HumanAgent
 from Agents.MonteCarloAgent import MonteCarloAgent
 from Agents.MiniMaxAgent import MiniMaxAgent
@@ -38,13 +37,13 @@ class Simulation:
 
 
 if __name__ == "__main__":
-    player1 = QLearningAgent(1, 0.1, 1, 1.0)
-    player2 = RandomAgent(2)
+    player1 = QLearningAgent(0.1, 1, 1.0)
+    player2 = RandomAgent()
 
     simulation = Simulation(player1, player2)
 
     n = 1000
-    runs = 10000
+    runs = 100
     for i, epsilon in enumerate([1.0 - k / n for k in range(n + 1)]):
 
         player1.setEpsilon(epsilon)
@@ -56,5 +55,5 @@ if __name__ == "__main__":
 
     simulation = Simulation(player1, player2)
     print(simulation.simulate(10000))
-    simulation = Simulation(MiniMaxAgent(1, 9), RandomAgent(2))
+    simulation = Simulation(MiniMaxAgent(9), RandomAgent())
     print(simulation.simulate(10000))

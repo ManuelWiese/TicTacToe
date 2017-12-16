@@ -2,8 +2,8 @@ from Agents.Agent import Agent
 import random
 
 class QLearningAgent(Agent):
-    def __init__(self, playerNumber, learningRate, discountFactor, epsilon):
-        super().__init__(playerNumber)
+    def __init__(self, learningRate, discountFactor, epsilon):
+        super().__init__()
         self.learningRate = learningRate
         self.discountFactor = discountFactor
         self.epsilon = epsilon
@@ -15,6 +15,7 @@ class QLearningAgent(Agent):
         self.epsilon = epsilon
 
     def makeTurn(self, game):
+        super().makeTurn(game)
 
         state = game.getState()
         Qstate = self.getQ(game)

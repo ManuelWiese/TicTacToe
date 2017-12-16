@@ -8,8 +8,8 @@ class DecisionTreeAgent(Agent):
     def allElementsEqual(someList):
         return len(set(someList)) <= 1
 
-    def __init__(self, playerNumber):
-        super().__init__(playerNumber)
+    def __init__(self):
+        super().__init__()
         self.gameConfigurationToWinPrediction = {}
 
     def winPrediction(self, game):
@@ -47,6 +47,8 @@ class DecisionTreeAgent(Agent):
         return prediction
 
     def makeTurn(self, game):
+        super().makeTurn(game)
+
         prediction = self.winPrediction(game)
         choices = game.getValidMoves()
 
