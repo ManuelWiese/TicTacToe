@@ -5,6 +5,7 @@ from GameState import GameState
 from CheckArgs import checkIntBetween
 from CheckArgs import checkTuple
 
+
 class TicTacToe(GameLogic):
 
     size = (3, 3)
@@ -30,7 +31,6 @@ class TicTacToe(GameLogic):
 
         self.state = TicTacToe.setCell(self.state, cell, turn)
 
-
     def getGameState(self):
         return TicTacToe.gameStates[self.state]
 
@@ -49,6 +49,7 @@ class TicTacToe(GameLogic):
             print("")
 
     def getHeuristics(self, playerNumber):
+        assert playerNumber == 1 or playerNumber == 2
 
         gameState = self.getGameState()
 
@@ -66,12 +67,12 @@ class TicTacToe(GameLogic):
 
         return 0
 
-
     @staticmethod
     def calculateBoardFromState(state):
         assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
 
-        board = [[0 for i in range(TicTacToe.size[0])] for j in range(TicTacToe.size[1])]
+        board = [[0 for i in range(TicTacToe.size[0])]
+                 for j in range(TicTacToe.size[1])]
 
         for j in range(TicTacToe.size[1]):
             for i in range(TicTacToe.size[0]):
@@ -83,15 +84,18 @@ class TicTacToe(GameLogic):
     @staticmethod
     def stateToBoard(state):
         assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
+
         return TicTacToe.boards[state]
 
     @staticmethod
     def getCell(state, cell):
-        board = TicTacToe.stateToBoard(state)
+        assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
 
         assert checkTuple(cell, int, 2)
         assert checkIntBetween(cell[0], 0, TicTacToe.size[0])
         assert checkIntBetween(cell[1], 0, TicTacToe.size[1])
+
+        board = TicTacToe.stateToBoard(state)
 
         return board[cell[0]][cell[1]]
 
@@ -119,7 +123,12 @@ class TicTacToe(GameLogic):
         return state
 
     @staticmethod
-    def checkCellDirection(state, cell, direction):
+    def consecutiveInDirection(state, cell, direction):
+        assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
+
+        assert checkTuple(cell, int, 2)
+        assert checkIntBetween(cell[0], 0, TicTacToe.size[0])
+        assert checkIntBetween(cell[1], 0, TicTacToe.size[1])
 
         assert checkTuple(direction, int, 2)
 
@@ -146,7 +155,8 @@ class TicTacToe(GameLogic):
             counter += 1
 
     @staticmethod
-    def checkCell(state, cell):
+    def maxConsecutive(state, cell):
+        assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
 
         assert checkTuple(cell, int, 2)
         assert checkIntBetween(cell[0], 0, TicTacToe.size[0])
@@ -156,16 +166,25 @@ class TicTacToe(GameLogic):
 
         directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
 
-        consecutive = 0
+        maxConsecutive = 0
 
         for direction in directions:
-            consecutive = max(TicTacToe.checkCellDirection(state, cell, direction)
-                              + TicTacToe.checkCellDirection(state, cell,
-                                                        (-1 * direction[0],
-                                                         -1 * direction[1]))
-                              + 1, consecutive)
+            consecutiveInDirection = TicTacToe.consecutiveInDirection(
+                state,
+                cell,
+                direction)
 
-        return consecutive
+            consecutiveInOppositeDirection = TicTacToe.consecutiveInDirection(
+                state,
+                cell,
+                (-1 * direction[0], -1 * direction[1]))
+
+            maxConsecutive = max(consecutiveInDirection
+                                 + consecutiveInOppositeDirection
+                                 + 1
+                                 , maxConsecutive)
+
+        return maxConsecutive
 
     @staticmethod
     def stateToGameState(state):
@@ -175,15 +194,15 @@ class TicTacToe(GameLogic):
 
         for i in range(TicTacToe.size[0]):
             for j in range(TicTacToe.size[1]):
-                marker = TicTacToe.getCell(state, (i,j))
+                marker = TicTacToe.getCell(state, (i, j))
 
                 if marker == 0:
                     hasFreeCell = True
                     continue
 
-                consecutive = TicTacToe.checkCell(state, (i,j))
+                maxConsecutive = TicTacToe.maxConsecutive(state, (i, j))
 
-                if consecutive >= TicTacToe.winSize:
+                if maxConsecutive >= TicTacToe.winSize:
                     if marker == 1:
                         return GameState.createPlayer1Won()
                     return GameState.createPlayer2Won()
@@ -191,7 +210,6 @@ class TicTacToe(GameLogic):
         if hasFreeCell:
             return GameState.createOngoing()
         return GameState.createTied()
-
 
     @staticmethod
     def initStaticLists():
@@ -202,9 +220,10 @@ class TicTacToe(GameLogic):
             TicTacToe.gameStates.append(TicTacToe.stateToGameState(state))
             TicTacToe.validMoves.append(TicTacToe.boardToValidMoves(board))
 
-
     @staticmethod
     def boardToValidMoves(board):
+        assert isinstance(board, list)
+
         validMoves = []
         for row in range(len(board)):
             for column in range(len(board[row])):

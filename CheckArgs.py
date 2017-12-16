@@ -5,6 +5,7 @@ def checkPositiveInt(value):
         return False
     return True
 
+
 def checkIntBetween(value, minValue, maxValue):
     if not isinstance(value, int):
         return False
@@ -19,6 +20,7 @@ def checkIntBetween(value, minValue, maxValue):
         return False
 
     return True
+
 
 def checkTuple(value, type, size):
     if not isinstance(value, tuple):

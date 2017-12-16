@@ -1,6 +1,5 @@
 import random
 from Play import Play
-from Game import Game
 
 from Agents.Agent import Agent
 from Agents.RandomAgent import RandomAgent
@@ -37,6 +36,7 @@ class Simulation:
 
         return statistics
 
+
 if __name__ == "__main__":
     player1 = QLearningAgent(1, 0.5, 1, 1.0)
     player2 = RandomAgent(2)
@@ -49,7 +49,9 @@ if __name__ == "__main__":
 
         player1.setEpsilon(epsilon)
 
-        print("Result after {} * {} runs, current epsilon = {}".format(i + 1, runs, epsilon))
+        print("Result after {} * {} runs,".format(i + 1, runs)
+              + " current epsilon = {}".format(epsilon))
+
         print(simulation.simulate(runs))
 
     player2 = QLearningAgent(2, 0.1, 1, 0.0)
