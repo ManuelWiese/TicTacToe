@@ -21,10 +21,7 @@ class DecisionTreeAgent(Agent):
         if not gameState.isOngoing():
             if gameState.isTied():
                 return DecisionTreeAgent.TIE
-            if gameState.player1Won():
-                return DecisionTreeAgent.PLAYER_1_WINS
-            if gameState.player2Won():
-                return DecisionTreeAgent.PLAYER_2_WINS
+            return gameState.getWinner()
 
         choices = game.getValidMoves()
         predictions = []

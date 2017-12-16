@@ -5,6 +5,7 @@ from GameState import GameState
 from CheckArgs import checkIntBetween
 from CheckArgs import checkTuple
 
+from Game import Game
 
 class TicTacToe(GameLogic):
 
@@ -58,19 +59,13 @@ class TicTacToe(GameLogic):
 
         gameState = self.getGameState()
 
-        if playerNumber == 1:
-            if gameState.player1Won():
-                return 1
-            if gameState.player2Won():
-                return -1
+        if gameState.isOngoing() or gameState.isTied():
+            return 0
 
-        if playerNumber == 2:
-            if gameState.player1Won():
-                return -1
-            if gameState.player2Won():
-                return 1
-
-        return 0
+        if gameState.didPlayerWin(playerNumber):
+            return 1
+        else:
+            return -1
 
     @staticmethod
     def calculateBoardFromState(state):
@@ -209,8 +204,8 @@ class TicTacToe(GameLogic):
 
                 if maxConsecutive >= TicTacToe.winSize:
                     if marker == 1:
-                        return GameState.createPlayer1Won()
-                    return GameState.createPlayer2Won()
+                        return GameState.createPlayerWon(Game.PLAYER1)
+                    return GameState.createPlayerWon(Game.PLAYER2)
 
         if hasFreeCell:
             return GameState.createOngoing()

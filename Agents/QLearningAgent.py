@@ -10,9 +10,13 @@ class QLearningAgent(Agent):
         self.Q = {}
         self.lastMove = None
         self.lastState = None
+        self.training = True
 
     def setEpsilon(self, epsilon):
         self.epsilon = epsilon
+
+    def setTraining(self, training):
+        self.training = training
 
     def makeTurn(self, game):
         super().makeTurn(game)
@@ -51,6 +55,9 @@ class QLearningAgent(Agent):
 
 
     def updateQ(self, game):
+        if not self.training:
+            return
+
         if self.lastMove is None:
             return
 

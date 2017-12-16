@@ -24,11 +24,10 @@ class HumanAgent(Agent):
     def endOfGame(self, game):
         super().endOfGame(game)
 
-        if game.getGameState().isTied():
+        gameState = game.getGameState()
+
+        if gameState.isTied():
             print("Game is tied")
-        elif game.getGameState().player1Won():
-            print("Player 1 wins")
-        elif game.getGameState().player2Won():
-            print("Player 2 wins")
+        print("Player {} wins".format(gameState.getWinner))
 
         game.display()

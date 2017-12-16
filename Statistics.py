@@ -19,13 +19,10 @@ class Statistics:
     def countGameState(self, gameState, playerNumber):
         if gameState.isTied():
             self.countTie()
-        elif gameState.player1Won() and playerNumber == Game.PLAYER1:
-            self.countWin()
-        elif gameState.player2Won() and playerNumber == Game.PLAYER2:
+        elif gameState.didPlayerWin(playerNumber):
             self.countWin()
         else:
             self.countLoss()
-
 
     def getTies(self):
         return self.__ties

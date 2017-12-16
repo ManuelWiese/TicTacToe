@@ -27,21 +27,16 @@ class Simulation:
 
         for i in range(numberOfGames):
             game = play.playGame()
-            gameState = game.getGameState()
 
 
 if __name__ == "__main__":
     player1 = QLearningAgent(0.1, 1, 1.0)
-    decision = DecisionTreeAgent()
-    monte = MonteCarloAgent(1000)
-    human = HumanAgent()
-    player2 = MiniMaxAgent(9)
+    player2 = MonteCarloAgent(1000)
 
-    # simulation = Simulation([player1, player2])
-    simulation = Simulation([player1, monte])
+    simulation = Simulation([player1, player2])
 
     n = 1000
-    runs = 100
+    runs = 1000
     for i, epsilon in enumerate([1.0 - k / n for k in range(n + 1)]):
 
         player1.setEpsilon(epsilon)
@@ -53,5 +48,7 @@ if __name__ == "__main__":
         print(player1.getStatistics())
         player1.resetStatistics()
 
-    simulation = Simulation([player1, human])
-    simulation.simulate(10)
+    player1.setTraining(False)
+    simulation = Simulation([player1, RandomAgent()])
+    simulation.simulate(runs)
+    print(player1.getStatistics())

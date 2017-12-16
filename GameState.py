@@ -1,34 +1,31 @@
 
 class GameState:
-    ONGOING, PLAYER1_WON, PLAYER2_WON, TIED = range(4)
 
     @staticmethod
     def createOngoing():
-        return GameState(GameState.ONGOING)
+        return GameState(True, False, None)
 
     @staticmethod
-    def createPlayer1Won():
-        return GameState(GameState.PLAYER1_WON)
-
-    @staticmethod
-    def createPlayer2Won():
-        return GameState(GameState.PLAYER2_WON)
+    def createPlayerWon(playerNumber):
+        return GameState(False, False, playerNumber)
 
     @staticmethod
     def createTied():
-        return GameState(GameState.TIED)
+        return GameState(False, True, None)
 
-    def __init__(self, gameState):
-        self.gameState = gameState
+    def __init__(self, ongoing, tied, winner):
+        self.ongoing = ongoing
+        self.tied = tied
+        self.winner = winner
 
     def isOngoing(self):
-        return self.gameState == GameState.ONGOING
+        return self.ongoing
 
     def isTied(self):
-        return self.gameState == GameState.TIED
+        return self.tied
 
-    def player1Won(self):
-        return self.gameState == GameState.PLAYER1_WON
+    def getWinner(self):
+        return self.winner
 
-    def player2Won(self):
-        return self.gameState == GameState.PLAYER2_WON
+    def didPlayerWin(self, playerNumber):
+        return self.winner == playerNumber
