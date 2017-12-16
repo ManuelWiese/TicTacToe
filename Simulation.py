@@ -38,13 +38,13 @@ class Simulation:
 
 
 if __name__ == "__main__":
-    player1 = QLearningAgent(1, 0.5, 1, 1.0)
+    player1 = QLearningAgent(1, 0.1, 1, 1.0)
     player2 = RandomAgent(2)
 
     simulation = Simulation(player1, player2)
 
-    n = 200
-    runs = 100
+    n = 1000
+    runs = 10000
     for i, epsilon in enumerate([1.0 - k / n for k in range(n + 1)]):
 
         player1.setEpsilon(epsilon)
@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
         print(simulation.simulate(runs))
 
-    player2 = QLearningAgent(2, 0.1, 1, 0.0)
-
     simulation = Simulation(player1, player2)
+    print(simulation.simulate(10000))
+    simulation = Simulation(MiniMaxAgent(1, 9), RandomAgent(2))
     print(simulation.simulate(10000))

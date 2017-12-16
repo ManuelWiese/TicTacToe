@@ -4,6 +4,8 @@ from GameLogic import GameLogic
 
 
 class Game:
+    PLAYER1 = 1
+    PLAYER2 = 2
 
     def __init__(self, gameLogic, firstTurn=1):
         assert isinstance(gameLogic, GameLogic)
@@ -25,10 +27,10 @@ class Game:
 
         self.gameLogic.makeTurn(move, self.turn)
 
-        if self.turn == 1:
-            self.turn = 2
+        if self.turn == Game.PLAYER1:
+            self.turn = Game.PLAYER2
         else:
-            self.turn = 1
+            self.turn = Game.PLAYER1
 
     def getTurn(self):
         return self.turn
@@ -49,5 +51,5 @@ class Game:
         self.gameLogic.display()
 
     def getHeuristics(self, playerNumber):
-        assert playerNumber == 1 or playerNumber == 2
+        assert playerNumber == Game.PLAYER1 or playerNumber == Game.PLAYER2
         return self.gameLogic.getHeuristics(playerNumber)

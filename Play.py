@@ -17,7 +17,7 @@ class Play:
         game = Game(TicTacToe(), firstTurn)
 
         while game.getGameState().isOngoing():
-            if game.getTurn() == 1:
+            if game.getTurn() == Game.PLAYER1:
                 currentPlayer = self.player1
                 otherPlayer = self.player2
             else:
