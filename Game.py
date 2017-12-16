@@ -2,8 +2,6 @@ from InvalidMoveError import InvalidMoveError
 
 from GameLogic import GameLogic
 
-import copy
-
 
 class Game:
 
@@ -16,7 +14,7 @@ class Game:
         self.turn = self.firstTurn
 
     def copy(self):
-        newGame = Game(copy.deepcopy(self.gameLogic), self.firstTurn)
+        newGame = Game(self.gameLogic.copy(), self.firstTurn)
         newGame.turn = self.turn
 
         return newGame

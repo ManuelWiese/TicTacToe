@@ -24,6 +24,11 @@ class TicTacToe(GameLogic):
 
         self.state = 0
 
+    def copy(self):
+        copied = TicTacToe()
+        copied.state = self.state
+        return copied
+
     def makeTurn(self, cell, turn):
         assert checkTuple(cell, int, 2)
         assert checkIntBetween(cell[0], 0, TicTacToe.size[0])

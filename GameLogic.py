@@ -4,6 +4,9 @@ class GameLogic:
     def __init__(self):
         raise NotImplementedError
 
+    def copy(self):
+        raise NotImplementedError
+
     def makeTurn(self, move):
         raise NotImplementedError
 
