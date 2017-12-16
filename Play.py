@@ -3,26 +3,30 @@ from TicTacToe import TicTacToe
 from Agents.Agent import Agent
 from InvalidMoveError import InvalidMoveError
 
+from CheckArgs import checkList
+
+import random
+
 
 class Play:
-    def __init__(self, player1, player2):
-        assert isinstance(player1, Agent)
-        assert isinstance(player2, Agent)
+    def __init__(self, players):
+        assert checkList(players, Agent)
+        self.players = players
 
-        self.player1 = player1
-        self.player2 = player2
+    def playGame(self, shufflePlayers = True):
+        if shufflePlayers:
+            # TODO: how can we avoid this?
+            random.shuffle(self.players)
 
-    def playGame(self, firstTurn=1):
-        assert firstTurn == 1 or firstTurn == 2
-        game = Game(TicTacToe(), firstTurn)
+        game = Game(TicTacToe())
 
         while game.getGameState().isOngoing():
             if game.getTurn() == Game.PLAYER1:
-                currentPlayer = self.player1
-                otherPlayer = self.player2
+                currentPlayer = self.players[0]
+                otherPlayer = self.players[1]
             else:
-                currentPlayer = self.player2
-                otherPlayer = self.player1
+                currentPlayer = self.players[1]
+                otherPlayer = self.players[0]
 
             try:
                 turn = currentPlayer.makeTurn(game)
@@ -32,7 +36,7 @@ class Play:
             except InvalidMoveError:
                 currentPlayer.wasInvalidTurn(game, turn)
 
-        self.player1.endOfGame(game)
-        self.player2.endOfGame(game)
+        self.players[0].endOfGame(game)
+        self.players[1].endOfGame(game)
 
         return game

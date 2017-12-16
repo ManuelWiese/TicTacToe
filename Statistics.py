@@ -1,42 +1,43 @@
+from Game import Game
+
 
 class Statistics:
     def __init__(self):
-        self.__tied = 0
-        self.__player1Won = 0
-        self.__player2Won = 0
+        self.__ties = 0
+        self.__wins = 0
+        self.__losses = 0
 
-    def player1Won(self):
-        self.__player1Won += 1
+    def countWin(self):
+        self.__wins += 1
 
-    def player2Won(self):
-        self.__player2Won += 1
+    def countLoss(self):
+        self.__losses += 1
 
-    def tied(self):
-        self.__tied += 1
+    def countTie(self):
+        self.__ties += 1
 
-    def countGameState(self, gameState):
-        if gameState.player1Won():
-            self.player1Won()
-        elif gameState.player2Won():
-            self.player2Won()
+    def countGameState(self, gameState, playerNumber):
+        if gameState.isTied():
+            self.countTie()
+        elif gameState.player1Won() and playerNumber == Game.PLAYER1:
+            self.countWin()
+        elif gameState.player2Won() and playerNumber == Game.PLAYER2:
+            self.countWin()
         else:
-            self.tied()
+            self.countLoss()
+
 
     def getTies(self):
-        return self.__tied
+        return self.__ties
 
-    def getLosses(self, playerNumber):
-        if playerNumber == 1:
-            return self.__player2Won
-        return self.__player1Won
+    def getLosses(self):
+        return self.__losses
 
-    def getWins(self, playerNumber):
-        if playerNumber == 1:
-            return self.__player1Won
-        return self.__player2Won
+    def getWins(self):
+        return self.__wins
 
     def __str__(self):
-        output = ("Tied: {}\n".format(self.__tied)
-                  + "Player 1 won: {}\n".format(self.__player1Won)
-                  + "Player 2 won: {}".format(self.__player2Won))
+        output = ("Tied: {}\n".format(self.__ties)
+                  + "wins: {}\n".format(self.__wins)
+                  + "losses: {}".format(self.__losses))
         return output

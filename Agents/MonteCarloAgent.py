@@ -18,7 +18,7 @@ class MonteCarloAgent(Agent):
     def makeTurn(self, game):
         super().makeTurn(game)
 
-        cacheKey = (game.getState(), game.getTurn())
+        cacheKey = (game.getState(), self.playerNumber)
         if cacheKey in self.cache:
             return self.cache[cacheKey]
 
@@ -31,13 +31,13 @@ class MonteCarloAgent(Agent):
 
             for j in range(self.numberOfGames):
                 finishedGame = self.playRandomGame(gameAfterMove.copy())
-                statistics[i].countGameState(finishedGame.getGameState())
+                statistics[i].countGameState(finishedGame.getGameState(), self.playerNumber)
 
         bestStatistic = 0
 
         for i, statistic in enumerate(statistics[1:]):
-            if statistic.getLosses(self.playerNumber) < statistics[bestStatistic].getLosses(self.playerNumber):
-                if statistic.getWins(self.playerNumber) > statistics[bestStatistic].getWins(self.playerNumber):
+            if statistic.getLosses() < statistics[bestStatistic].getLosses():
+                if statistic.getWins() > statistics[bestStatistic].getWins():
                     bestStatistic = i + 1
 
         self.cache.update({cacheKey: validMoves[bestStatistic]})

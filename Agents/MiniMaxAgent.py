@@ -8,7 +8,7 @@ class MiniMaxAgent(Agent):
         self.cache = {}
 
     def minimax(self, game, depth):
-        cacheKey = (game.getState(), game.getTurn())
+        cacheKey = (game.getState(), self.playerNumber)
         if cacheKey in self.cache:
             return self.cache[cacheKey]
 

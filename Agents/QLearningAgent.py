@@ -66,6 +66,8 @@ class QLearningAgent(Agent):
                                                  + self.learningRate * (reward + self.discountFactor * optimalFutureValue))
 
     def endOfGame(self, game):
+        super().endOfGame(game)
+
         self.updateQ(game)
 
         self.lastMove = None

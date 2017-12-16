@@ -22,6 +22,8 @@ class HumanAgent(Agent):
         print("Valid moves: {}".format(game.getValidMoves()))
 
     def endOfGame(self, game):
+        super().endOfGame(game)
+
         if game.getGameState().isTied():
             print("Game is tied")
         elif game.getGameState().player1Won():

@@ -31,3 +31,11 @@ def checkTuple(value, type, size):
         if not isinstance(item, type):
             return False
     return True
+
+def checkList(value, type):
+    if not isinstance(value, list):
+        return False
+    for item in value:
+        if not isinstance(item, type):
+            return False
+    return True

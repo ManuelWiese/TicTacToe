@@ -7,16 +7,14 @@ class Game:
     PLAYER1 = 1
     PLAYER2 = 2
 
-    def __init__(self, gameLogic, firstTurn=1):
+    def __init__(self, gameLogic):
         assert isinstance(gameLogic, GameLogic)
-        assert isinstance(firstTurn, int)
 
         self.gameLogic = gameLogic
-        self.firstTurn = firstTurn
-        self.turn = self.firstTurn
+        self.turn = Game.PLAYER1
 
     def copy(self):
-        newGame = Game(self.gameLogic.copy(), self.firstTurn)
+        newGame = Game(self.gameLogic.copy())
         newGame.turn = self.turn
 
         return newGame
