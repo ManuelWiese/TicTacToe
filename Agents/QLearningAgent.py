@@ -1,5 +1,7 @@
 from Agents.Agent import Agent
 import random
+import sys
+
 
 class QLearningAgent(Agent):
     def __init__(self, learningRate, discountFactor, epsilon):
@@ -18,6 +20,20 @@ class QLearningAgent(Agent):
     def setTraining(self, training):
         self.training = training
 
+    @staticmethod
+    def getBestMoves(Qstate):
+        bestReward = -sys.maxsize
+        bestMoves = []
+
+        for move, reward in Qstate.items():
+            if reward > bestReward:
+                bestReward = reward
+                bestMoves = [move]
+            elif reward == bestReward:
+                bestMoves.append(move)
+
+        return bestMoves
+
     def makeTurn(self, game):
         super().makeTurn(game)
 
@@ -27,8 +43,8 @@ class QLearningAgent(Agent):
         if random.random() < self.epsilon:
             move = random.choice(list(Qstate))
         else:
-            maxKeyValuePair = max(Qstate.items(), key = lambda x: x[1])
-            move = maxKeyValuePair[0]
+            bestMoves = self.getBestMoves(Qstate)
+            move = random.choice(bestMoves)
 
         self.lastMove = move
         self.lastState = state
@@ -45,14 +61,12 @@ class QLearningAgent(Agent):
 
         tmpDir = {}
         for move in game.getValidMoves():
-            tmpDir.update({move : 0})
-        self.Q.update({state : tmpDir})
+            tmpDir.update({move: 0})
+        self.Q.update({state: tmpDir})
         return self.Q[state]
-
 
     def feedbackAfterOpponentsTurn(self, game):
         self.updateQ(game)
-
 
     def updateQ(self, game):
         if not self.training:
@@ -69,8 +83,10 @@ class QLearningAgent(Agent):
         else:
             optimalFutureValue = 0
 
-        self.Q[self.lastState][self.lastMove] = ((1 - self.learningRate) * self.Q[self.lastState][self.lastMove]
-                                                 + self.learningRate * (reward + self.discountFactor * optimalFutureValue))
+        self.Q[self.lastState][self.lastMove] = ((1 - self.learningRate)
+                                                 * self.Q[self.lastState][self.lastMove]
+                                                 + self.learningRate
+                                                 * (reward + self.discountFactor * optimalFutureValue))
 
     def endOfGame(self, game):
         super().endOfGame(game)
