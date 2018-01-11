@@ -18,10 +18,10 @@ class Play:
             # TODO: how can we avoid this?
             random.shuffle(self.players)
 
-        game = Game(TicTacToe())
+        game = TicTacToe()
 
         while game.getGameState().isOngoing():
-            if game.getTurn() == Game.PLAYER1:
+            if game.getTurn() == game.PLAYER1:
                 currentPlayer = self.players[0]
                 otherPlayer = self.players[1]
             else:

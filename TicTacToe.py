@@ -1,4 +1,4 @@
-from GameLogic import GameLogic
+from InvalidMoveError import InvalidMoveError
 
 from GameState import GameState
 
@@ -7,7 +7,10 @@ from CheckArgs import checkTuple
 
 from Game import Game
 
-class TicTacToe(GameLogic):
+
+class TicTacToe(Game):
+    PLAYER1 = 1
+    PLAYER2 = 2
 
     size = (3, 3)
     winSize = 3
@@ -23,19 +26,33 @@ class TicTacToe(GameLogic):
         if len(TicTacToe.boards) == 0:
             TicTacToe.initStaticLists()
 
+        self.turn = TicTacToe.PLAYER1
+
         self.state = 0
 
     def copy(self):
         copied = TicTacToe()
         copied.state = self.state
+        copied.turn = self.turn
+
         return copied
 
-    def makeTurn(self, cell, turn):
+    def makeTurn(self, cell):
         assert checkTuple(cell, int, 2)
         assert checkIntBetween(cell[0], 0, TicTacToe.size[0])
         assert checkIntBetween(cell[1], 0, TicTacToe.size[1])
+        if cell not in self.getValidMoves():
+            raise InvalidMoveError()
 
-        self.state = TicTacToe.setCell(self.state, cell, turn)
+        self.state = TicTacToe.setCell(self.state, cell, self.turn)
+
+        if self.turn == TicTacToe.PLAYER1:
+            self.turn = TicTacToe.PLAYER2
+        else:
+            self.turn = TicTacToe.PLAYER1
+
+    def getTurn(self):
+        return self.turn
 
     def getGameState(self):
         return TicTacToe.gameStates[self.state]
@@ -43,7 +60,7 @@ class TicTacToe(GameLogic):
     def getValidMoves(self):
         return TicTacToe.validMoves[self.state]
 
-    def __hash__(self):
+    def getState(self):
         return self.state
 
     def display(self):
@@ -204,8 +221,8 @@ class TicTacToe(GameLogic):
 
                 if maxConsecutive >= TicTacToe.winSize:
                     if marker == 1:
-                        return GameState.createPlayerWon(Game.PLAYER1)
-                    return GameState.createPlayerWon(Game.PLAYER2)
+                        return GameState.createPlayerWon(TicTacToe.PLAYER1)
+                    return GameState.createPlayerWon(TicTacToe.PLAYER2)
 
         if hasFreeCell:
             return GameState.createOngoing()
