@@ -6,6 +6,11 @@ class Game:
     def copy(self):
         raise NotImplementedError
 
+    # TODO: games with variable number of players?
+    @staticmethod
+    def getPlayerCount():
+        raise NotImplementedError
+
     def makeTurn(self, move):
         raise NotImplementedError
 

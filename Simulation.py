@@ -13,17 +13,24 @@ from Statistics import Statistics
 
 from CheckArgs import checkList
 
+from Game import Game
+from TicTacToe import TicTacToe
+
 
 class Simulation:
-    def __init__(self, players):
+    def __init__(self, GameClass, players):
         assert checkList(players, Agent)
+        assert Game in GameClass.__bases__
+        assert len(players) == GameClass.getPlayerCount()
+        self.GameClass = GameClass
         self.players = players
+
 
     def simulate(self, numberOfGames):
         assert isinstance(numberOfGames, int)
         assert numberOfGames >= 0
 
-        play = Play(self.players)
+        play = Play(self.GameClass, self.players)
 
         for i in range(numberOfGames):
             game = play.playGame()
@@ -33,7 +40,7 @@ if __name__ == "__main__":
     player1 = QLearningAgent(0.1, 1, 1.0)
     player2 = MonteCarloAgent(1000)
 
-    simulation = Simulation([player1, player2])
+    simulation = Simulation(TicTacToe, [player1, player2])
 
     n = 1000
     runs = 1000
@@ -49,6 +56,6 @@ if __name__ == "__main__":
         player1.resetStatistics()
 
     player1.setTraining(False)
-    simulation = Simulation([player1, RandomAgent()])
+    simulation = Simulation(TicTacToe, [player1, RandomAgent()])
     simulation.simulate(runs)
     print(player1.getStatistics())

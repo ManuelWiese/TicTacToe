@@ -9,6 +9,8 @@ from Game import Game
 
 
 class TicTacToe(Game):
+    PLAYERCOUNT = 2
+
     PLAYER1 = 1
     PLAYER2 = 2
 
@@ -36,6 +38,10 @@ class TicTacToe(Game):
         copied.turn = self.turn
 
         return copied
+
+    @staticmethod
+    def getPlayerCount():
+        return TicTacToe.PLAYERCOUNT
 
     def makeTurn(self, cell):
         assert checkTuple(cell, int, 2)

@@ -9,7 +9,7 @@ class Agent:
     def makeTurn(self, game):
         self.playerNumber = game.getTurn()
 
-    def feedbackAfterOpponentsTurn(self, game):
+    def feedbackBeforeTurn(self, game):
         pass
 
     def wasInvalidTurn(self, game, turn):

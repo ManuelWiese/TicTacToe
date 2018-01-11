@@ -65,7 +65,7 @@ class QLearningAgent(Agent):
         self.Q.update({state: tmpDir})
         return self.Q[state]
 
-    def feedbackAfterOpponentsTurn(self, game):
+    def feedbackBeforeTurn(self, game):
         self.updateQ(game)
 
     def updateQ(self, game):
