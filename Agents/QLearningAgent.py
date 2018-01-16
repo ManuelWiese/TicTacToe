@@ -75,7 +75,7 @@ class QLearningAgent(Agent):
         if self.lastMove is None:
             return
 
-        reward = game.getHeuristics(self.playerNumber)
+        reward = game.getScore(self.playerNumber)
 
         if game.getState() in self.Q:
             Qstate = self.Q[game.getState()]

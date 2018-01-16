@@ -78,7 +78,7 @@ class TicTacToe(Game):
                 print("{}|".format(TicTacToe.markers[cell]), end='')
             print("")
 
-    def getHeuristics(self, playerNumber):
+    def getScore(self, playerNumber):
         assert playerNumber == TicTacToe.PLAYER1 or playerNumber == TicTacToe.PLAYER2
 
         gameState = self.getGameState()

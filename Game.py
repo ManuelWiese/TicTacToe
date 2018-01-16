@@ -29,5 +29,5 @@ class Game:
     def display(self):
         raise NotImplementedError
 
-    def getHeuristics(self, playerNumber):
+    def getScore(self, playerNumber):
         raise NotImplementedError

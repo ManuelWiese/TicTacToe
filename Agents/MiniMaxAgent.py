@@ -13,7 +13,7 @@ class MiniMaxAgent(Agent):
             return self.cache[cacheKey]
 
         if depth == 0 or not game.getGameState().isOngoing():
-            return game.getHeuristics(self.playerNumber)
+            return game.getScore(self.playerNumber)
 
         if game.getTurn() == self.playerNumber:
             bestValue = -sys.maxsize
