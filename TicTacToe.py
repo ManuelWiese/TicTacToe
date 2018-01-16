@@ -11,8 +11,8 @@ from Game import Game
 class TicTacToe(Game):
     PLAYERCOUNT = 2
 
-    PLAYER1 = 1
-    PLAYER2 = 2
+    PLAYER1 = 0
+    PLAYER2 = 1
 
     size = (3, 3)
     winSize = 3
@@ -50,7 +50,8 @@ class TicTacToe(Game):
         if cell not in self.getValidMoves():
             raise InvalidMoveError()
 
-        self.state = TicTacToe.setCell(self.state, cell, self.turn)
+        marker = self.turn + 1
+        self.state = TicTacToe.setCell(self.state, cell, marker)
 
         if self.turn == TicTacToe.PLAYER1:
             self.turn = TicTacToe.PLAYER2
@@ -78,7 +79,7 @@ class TicTacToe(Game):
             print("")
 
     def getHeuristics(self, playerNumber):
-        assert playerNumber == 1 or playerNumber == 2
+        assert playerNumber == TicTacToe.PLAYER1 or playerNumber == TicTacToe.PLAYER2
 
         gameState = self.getGameState()
 

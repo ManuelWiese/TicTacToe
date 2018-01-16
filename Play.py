@@ -4,6 +4,7 @@ from InvalidMoveError import InvalidMoveError
 from CheckArgs import checkList
 
 import random
+import copy
 
 
 class Play:
@@ -12,7 +13,7 @@ class Play:
         assert len(players) == GameClass.getPlayerCount()
 
         self.GameClass = GameClass
-        self.players = players
+        self.players = copy.copy(players)
 
     def playGame(self, shufflePlayers = True):
         if shufflePlayers:
@@ -21,17 +22,14 @@ class Play:
 
         game = self.GameClass()
 
-        playerIndex = 0
-
         while game.getGameState().isOngoing():
-            currentPlayer = self.players[playerIndex]
+            currentPlayer = self.players[game.getTurn()]
 
             currentPlayer.feedbackBeforeTurn(game)
 
             try:
                 turn = currentPlayer.makeTurn(game)
                 game.makeTurn(turn)
-                playerIndex = (playerIndex + 1) % len(self.players)
 
             except InvalidMoveError:
                 currentPlayer.wasInvalidTurn(game, turn)

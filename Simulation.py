@@ -37,25 +37,19 @@ class Simulation:
 
 
 if __name__ == "__main__":
-    player1 = QLearningAgent(0.1, 1, 1.0)
-    player2 = MonteCarloAgent(1000)
+    players = [QLearningAgent(0.1, 1, 1.0), MonteCarloAgent(1000)]
 
-    simulation = Simulation(TicTacToe, [player1, player2])
+    simulation = Simulation(TicTacToe, players)
 
     n = 1000
     runs = 1000
     for i, epsilon in enumerate([1.0 - k / n for k in range(n + 1)]):
 
-        player1.setEpsilon(epsilon)
+        players[0].setEpsilon(epsilon)
 
         print("Result after {} * {} runs,".format(i + 1, runs)
               + " current epsilon = {}".format(epsilon))
 
         simulation.simulate(runs)
-        print(player1.getStatistics())
-        player1.resetStatistics()
-
-    player1.setTraining(False)
-    simulation = Simulation(TicTacToe, [player1, RandomAgent()])
-    simulation.simulate(runs)
-    print(player1.getStatistics())
+        print(players[0].getStatistics())
+        players[0].resetStatistics()
