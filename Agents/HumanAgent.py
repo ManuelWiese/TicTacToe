@@ -3,8 +3,8 @@ from InvalidMoveError import InvalidMoveError
 
 class HumanAgent(Agent):
 
-    def makeTurn(self, game):
-        super().makeTurn(game)
+    def getAction(self, game):
+        super().getAction(game)
 
         print("Player {}, it's your turn".format(game.getTurn()))
         game.display()
@@ -14,12 +14,12 @@ class HumanAgent(Agent):
             return tuple(turn)
         except:
             print("{} is not a valid input".format(turn))
-            return self.makeTurn(game)
+            return self.getAction(game)
 
 
     def wasInvalidTurn(self, game, turn):
         print("your input '{}' is invalid".format(turn))
-        print("Valid moves: {}".format(game.getValidMoves()))
+        print("Valid moves: {}".format(game.getValidActions()))
 
     def endOfGame(self, game):
         super().endOfGame(game)

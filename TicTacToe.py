@@ -43,11 +43,11 @@ class TicTacToe(Game):
     def getPlayerCount():
         return TicTacToe.PLAYERCOUNT
 
-    def makeTurn(self, cell):
+    def makeMove(self, cell):
         assert checkTuple(cell, int, 2)
         assert checkIntBetween(cell[0], 0, TicTacToe.size[0])
         assert checkIntBetween(cell[1], 0, TicTacToe.size[1])
-        if cell not in self.getValidMoves():
+        if cell not in self.getValidActions():
             raise InvalidMoveError()
 
         marker = self.turn + 1
@@ -64,7 +64,7 @@ class TicTacToe(Game):
     def getGameState(self):
         return TicTacToe.gameStates[self.state]
 
-    def getValidMoves(self):
+    def getValidActions(self):
         return TicTacToe.validMoves[self.state]
 
     def getState(self):

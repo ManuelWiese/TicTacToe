@@ -74,20 +74,20 @@ class TestGame(unittest.TestCase):
         self.assertEqual(2, result)
 
     def test_makeTurnTypeError(self):
-        self.assertRaises(AssertionError, self.game.makeTurn, "0")
+        self.assertRaises(AssertionError, self.game.makeMove, "0")
 
     def test_makeTurnValueError(self):
-        self.assertRaises(AssertionError, self.game.makeTurn, (-1, -1))
+        self.assertRaises(AssertionError, self.game.makeMove, (-1, -1))
 
     def test_makeTurnInvalidMoveError(self):
         self.game.state = 1
         self.game.turn = 1
-        self.assertRaises(InvalidMoveError, self.game.makeTurn, (0, 0))
+        self.assertRaises(InvalidMoveError, self.game.makeMove, (0, 0))
 
     def test_makeTurn(self):
         self.game.state = 0
         self.game.turn = 1
-        self.game.makeTurn((0, 0))
+        self.game.makeMove((0, 0))
 
         self.assertEqual(1, self.game.state)
         self.assertEqual(2, self.game.turn)

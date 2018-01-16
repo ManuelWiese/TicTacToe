@@ -34,8 +34,8 @@ class QLearningAgent(Agent):
 
         return bestMoves
 
-    def makeTurn(self, game):
-        super().makeTurn(game)
+    def getAction(self, game):
+        super().getAction(game)
 
         state = game.getState()
         Qstate = self.getQ(game)
@@ -49,7 +49,7 @@ class QLearningAgent(Agent):
         self.lastMove = move
         self.lastState = state
 
-        assert move in game.getValidMoves()
+        assert move in game.getValidActions()
 
         return move
 
@@ -60,7 +60,7 @@ class QLearningAgent(Agent):
             return self.Q[state]
 
         tmpDir = {}
-        for move in game.getValidMoves():
+        for move in game.getValidActions():
             tmpDir.update({move: 0})
         self.Q.update({state: tmpDir})
         return self.Q[state]

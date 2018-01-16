@@ -10,24 +10,24 @@ class MonteCarloAgent(Agent):
 
     def playRandomGame(self, game):
         while game.getGameState().isOngoing():
-            randomMove = random.choice(game.getValidMoves())
-            game.makeTurn(randomMove)
+            randomMove = random.choice(game.getValidActions())
+            game.makeMove(randomMove)
 
         return game
 
-    def makeTurn(self, game):
-        super().makeTurn(game)
+    def getAction(self, game):
+        super().getAction(game)
 
         cacheKey = (game.getState(), self.playerNumber)
         if cacheKey in self.cache:
             return self.cache[cacheKey]
 
-        validMoves = game.getValidMoves()
+        validMoves = game.getValidActions()
         statistics = [Statistics() for i in range(len(validMoves))]
 
         for i, move in enumerate(validMoves):
             gameAfterMove = game.copy()
-            gameAfterMove.makeTurn(move)
+            gameAfterMove.makeMove(move)
 
             for j in range(self.numberOfGames):
                 finishedGame = self.playRandomGame(gameAfterMove.copy())

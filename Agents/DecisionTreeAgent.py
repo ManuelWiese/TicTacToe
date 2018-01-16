@@ -23,12 +23,12 @@ class DecisionTreeAgent(Agent):
                 return DecisionTreeAgent.TIE
             return gameState.getWinner()
 
-        choices = game.getValidMoves()
+        choices = game.getValidActions()
         predictions = []
 
         for choice in choices:
             newGame = game.copy()
-            newGame.makeTurn(choice)
+            newGame.makeMove(choice)
 
             predictions.append(self.winPrediction(newGame))
 
@@ -43,14 +43,14 @@ class DecisionTreeAgent(Agent):
 
         return prediction
 
-    def makeTurn(self, game):
-        super().makeTurn(game)
+    def getAction(self, game):
+        super().getAction(game)
 
         prediction = self.winPrediction(game)
-        choices = game.getValidMoves()
+        choices = game.getValidActions()
 
         for choice in choices:
             newGame = game.copy()
-            newGame.makeTurn(choice)
+            newGame.makeMove(choice)
             if self.winPrediction(newGame) == prediction:
                 return choice

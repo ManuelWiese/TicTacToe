@@ -6,7 +6,7 @@ class Agent:
         self.playerNumber = None
         self.statistics = Statistics()
 
-    def makeTurn(self, game):
+    def getAction(self, game):
         self.playerNumber = game.getTurn()
 
     def feedbackBeforeTurn(self, game):

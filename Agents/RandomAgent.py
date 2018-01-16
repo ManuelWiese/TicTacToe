@@ -3,8 +3,8 @@ import random
 
 class RandomAgent(Agent):
 
-    def makeTurn(self, game):
-        super().makeTurn(game)
+    def getAction(self, game):
+        super().getAction(game)
 
-        choices = game.getValidMoves()
+        choices = game.getValidActions()
         return random.choice(choices)

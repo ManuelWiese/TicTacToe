@@ -20,11 +20,11 @@ class MiniMaxAgent(Agent):
         else:
             bestValue = sys.maxsize
 
-        validMoves = game.getValidMoves()
+        validMoves = game.getValidActions()
 
         for move in validMoves:
             copiedGame = game.copy()
-            copiedGame.makeTurn(move)
+            copiedGame.makeMove(move)
 
             value = self.minimax(copiedGame, depth-1)
             if game.getTurn() == self.playerNumber:
@@ -36,16 +36,16 @@ class MiniMaxAgent(Agent):
         return bestValue
 
 
-    def makeTurn(self, game):
-        super().makeTurn(game)
+    def getAction(self, game):
+        super().getAction(game)
 
-        validMoves = game.getValidMoves()
+        validMoves = game.getValidActions()
 
         bestMove = validMoves[0]
         bestValue = -sys.maxsize
         for move in validMoves:
             copiedGame = game.copy()
-            copiedGame.makeTurn(move)
+            copiedGame.makeMove(move)
 
             value = self.minimax(copiedGame, self.depth)
             if value > bestValue:

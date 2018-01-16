@@ -28,12 +28,11 @@ class Play:
             currentPlayer.feedbackBeforeTurn(game)
 
             try:
-                turn = currentPlayer.makeTurn(game)
-                game.makeTurn(turn)
+                action = currentPlayer.getAction(game)
+                game.makeMove(action)
 
             except InvalidMoveError:
-                currentPlayer.wasInvalidTurn(game, turn)
-
+                currentPlayer.wasInvalidTurn(game, action)
 
         for player in self.players:
             player.endOfGame(game)

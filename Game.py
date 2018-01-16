@@ -11,7 +11,7 @@ class Game:
     def getPlayerCount():
         raise NotImplementedError
 
-    def makeTurn(self, move):
+    def makeMove(self, move):
         raise NotImplementedError
 
     def getTurn(self):
@@ -20,7 +20,7 @@ class Game:
     def getGameState(self):
         raise NotImplementedError
 
-    def getValidMoves(self):
+    def getValidActions(self):
         raise NotImplementedError
 
     def getState(self):
