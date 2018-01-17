@@ -16,7 +16,7 @@ class Agent:
         print("Invalid move {}".format(turn))
 
     def endOfGame(self, game):
-        self.statistics.countGameState(game.getGameState(), self.playerNumber)
+        self.statistics.countGameState(game.getGameStatus(), self.playerNumber)
 
     def resetStatistics(self):
         self.statistics = Statistics()

@@ -1,6 +1,6 @@
 from InvalidMoveError import InvalidMoveError
 
-from GameState import GameState
+from GameStatus import GameStatus
 
 from CheckArgs import checkIntBetween
 from CheckArgs import checkTuple
@@ -19,7 +19,7 @@ class TicTacToe(Game):
 
     markers = [' ', 'x', 'o']
     boards = []
-    gameStates = []
+    gameStatus = []
     validMoves = []
 
     numberOfStates = len(markers)**(size[0] * size[1])
@@ -61,8 +61,8 @@ class TicTacToe(Game):
     def getTurn(self):
         return self.turn
 
-    def getGameState(self):
-        return TicTacToe.gameStates[self.state]
+    def getGameStatus(self):
+        return TicTacToe.gameStatus[self.state]
 
     def getValidActions(self):
         return TicTacToe.validMoves[self.state]
@@ -81,12 +81,12 @@ class TicTacToe(Game):
     def getScore(self, playerNumber):
         assert playerNumber == TicTacToe.PLAYER1 or playerNumber == TicTacToe.PLAYER2
 
-        gameState = self.getGameState()
+        gameStatus = self.getGameStatus()
 
-        if gameState.isOngoing() or gameState.isTied():
+        if gameStatus.isOngoing() or gameStatus.isTied():
             return 0
 
-        if gameState.didPlayerWin(playerNumber):
+        if gameStatus.didPlayerWin(playerNumber):
             return 1
         else:
             return -1
@@ -211,7 +211,7 @@ class TicTacToe(Game):
         return maxConsecutive
 
     @staticmethod
-    def stateToGameState(state):
+    def stateToGameStatus(state):
         assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
 
         hasFreeCell = False
@@ -228,12 +228,12 @@ class TicTacToe(Game):
 
                 if maxConsecutive >= TicTacToe.winSize:
                     if marker == 1:
-                        return GameState.createPlayerWon(TicTacToe.PLAYER1)
-                    return GameState.createPlayerWon(TicTacToe.PLAYER2)
+                        return GameStatus.createPlayerWon(TicTacToe.PLAYER1)
+                    return GameStatus.createPlayerWon(TicTacToe.PLAYER2)
 
         if hasFreeCell:
-            return GameState.createOngoing()
-        return GameState.createTied()
+            return GameStatus.createOngoing()
+        return GameStatus.createTied()
 
     @staticmethod
     def initStaticLists():
@@ -241,7 +241,7 @@ class TicTacToe(Game):
         for state in states:
             board = TicTacToe.calculateBoardFromState(state)
             TicTacToe.boards.append(board)
-            TicTacToe.gameStates.append(TicTacToe.stateToGameState(state))
+            TicTacToe.gameStatus.append(TicTacToe.stateToGameStatus(state))
             TicTacToe.validMoves.append(TicTacToe.boardToValidMoves(board))
 
     @staticmethod

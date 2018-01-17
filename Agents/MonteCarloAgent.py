@@ -9,7 +9,7 @@ class MonteCarloAgent(Agent):
         self.cache = {}
 
     def playRandomGame(self, game):
-        while game.getGameState().isOngoing():
+        while game.getGameStatus().isOngoing():
             randomMove = random.choice(game.getValidActions())
             game.makeMove(randomMove)
 
@@ -31,7 +31,7 @@ class MonteCarloAgent(Agent):
 
             for j in range(self.numberOfGames):
                 finishedGame = self.playRandomGame(gameAfterMove.copy())
-                statistics[i].countGameState(finishedGame.getGameState(), self.playerNumber)
+                statistics[i].countGameState(finishedGame.getGameStatus(), self.playerNumber)
 
         bestStatistic = 0
 

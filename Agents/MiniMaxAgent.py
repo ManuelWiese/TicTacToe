@@ -12,7 +12,7 @@ class MiniMaxAgent(Agent):
         if cacheKey in self.cache:
             return self.cache[cacheKey]
 
-        if depth == 0 or not game.getGameState().isOngoing():
+        if depth == 0 or not game.getGameStatus().isOngoing():
             return game.getScore(self.playerNumber)
 
         if game.getTurn() == self.playerNumber:

@@ -17,7 +17,7 @@ class Game:
     def getTurn(self):
         raise NotImplementedError
 
-    def getGameState(self):
+    def getGameStatus(self):
         raise NotImplementedError
 
     def getValidActions(self):

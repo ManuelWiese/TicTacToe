@@ -22,7 +22,7 @@ class Play:
 
         game = self.GameClass()
 
-        while game.getGameState().isOngoing():
+        while game.getGameStatus().isOngoing():
             currentPlayer = self.players[game.getTurn()]
 
             currentPlayer.feedbackBeforeTurn(game)

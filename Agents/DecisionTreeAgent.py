@@ -17,11 +17,11 @@ class DecisionTreeAgent(Agent):
         if gameConfiguration in self.gameConfigurationToWinPrediction:
             return self.gameConfigurationToWinPrediction[gameConfiguration]
 
-        gameState = game.getGameState()
-        if not gameState.isOngoing():
-            if gameState.isTied():
+        gameStatus = game.getGameStatus()
+        if not gameStatus.isOngoing():
+            if gameStatus.isTied():
                 return DecisionTreeAgent.TIE
-            return gameState.getWinner()
+            return gameStatus.getWinner()
 
         choices = game.getValidActions()
         predictions = []

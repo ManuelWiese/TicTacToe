@@ -1,17 +1,17 @@
 
-class GameState:
+class GameStatus:
 
     @staticmethod
     def createOngoing():
-        return GameState(True, False, None)
+        return GameStatus(True, False, None)
 
     @staticmethod
     def createPlayerWon(playerNumber):
-        return GameState(False, False, playerNumber)
+        return GameStatus(False, False, playerNumber)
 
     @staticmethod
     def createTied():
-        return GameState(False, True, None)
+        return GameStatus(False, True, None)
 
     def __init__(self, ongoing, tied, winner):
         self.ongoing = ongoing
