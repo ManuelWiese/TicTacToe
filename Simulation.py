@@ -1,5 +1,6 @@
 import random
-from Play import Play
+
+from InvalidMoveError import InvalidMoveError
 
 from Agents.Agent import Agent
 from Agents.RandomAgent import RandomAgent
@@ -9,12 +10,12 @@ from Agents.MonteCarloAgent import MonteCarloAgent
 from Agents.MiniMaxAgent import MiniMaxAgent
 from Agents.QLearningAgent import QLearningAgent
 
-from Statistics import Statistics
 
 from CheckArgs import checkList
 
 from Game import Game
 from TicTacToe import TicTacToe
+import copy
 
 
 class Simulation:
@@ -23,17 +24,38 @@ class Simulation:
         assert Game in GameClass.__bases__
         assert len(players) == GameClass.getPlayerCount()
         self.GameClass = GameClass
-        self.players = players
+        self.players = copy.copy(players)
 
+    def playGame(self, shufflePlayers = True):
+        if shufflePlayers:
+            # TODO: how can we avoid this?
+            random.shuffle(self.players)
+
+        game = self.GameClass()
+
+        while game.getGameStatus().isOngoing():
+            currentPlayer = self.players[game.getTurn()]
+
+            currentPlayer.feedbackBeforeTurn(game)
+
+            try:
+                action = currentPlayer.getAction(game)
+                game.makeMove(action)
+
+            except InvalidMoveError:
+                currentPlayer.wasInvalidAction(game, action)
+
+        for player in self.players:
+            player.endOfGame(game)
+
+        return game
 
     def simulate(self, numberOfGames):
         assert isinstance(numberOfGames, int)
         assert numberOfGames >= 0
 
-        play = Play(self.GameClass, self.players)
-
         for i in range(numberOfGames):
-            game = play.playGame()
+            self.playGame()
 
 
 if __name__ == "__main__":
