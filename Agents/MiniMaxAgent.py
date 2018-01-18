@@ -2,8 +2,8 @@ from Agents.Agent import Agent
 import sys
 
 class MiniMaxAgent(Agent):
-    def __init__(self, depth):
-        super().__init__()
+    def __init__(self, depth, collectStatistics=True):
+        super().__init__(collectStatistics)
         self.depth = depth
         self.cache = {}
 

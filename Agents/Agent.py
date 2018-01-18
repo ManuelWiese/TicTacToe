@@ -1,10 +1,14 @@
 from Statistics import Statistics
-from Game import Game
+
 
 class Agent:
-    def __init__(self):
+    def __init__(self, collectStatistics=True):
         self.playerNumber = None
-        self.statistics = Statistics()
+        self.collectStatistics = collectStatistics
+        if self.collectStatistics:
+            self.statistics = Statistics()
+        else:
+            self.statistics = None
 
     def getAction(self, game):
         self.playerNumber = game.getTurn()
@@ -16,10 +20,17 @@ class Agent:
         print("Invalid move {}".format(turn))
 
     def endOfGame(self, game):
-        self.statistics.countGameState(game.getGameStatus(), self.playerNumber)
+        if self.collectStatistics:
+            self.statistics.countGameState(game.getGameStatus(), self.playerNumber)
 
     def resetStatistics(self):
-        self.statistics = Statistics()
+        if self.statistics is not None:
+            self.statistics = Statistics()
+
+    def setCollectStatistics(self, collectStatistics):
+        self.collectStatistics = collectStatistics
+        if self.statistics is None:
+            self.statistics = Statistics()
 
     def getStatistics(self):
         return self.statistics

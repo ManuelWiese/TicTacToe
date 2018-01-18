@@ -3,8 +3,8 @@ import random
 from Statistics import Statistics
 
 class MonteCarloAgent(Agent):
-    def __init__(self, numberOfGames):
-        super().__init__()
+    def __init__(self, numberOfGames, collectStatistics=True):
+        super().__init__(collectStatistics)
         self.numberOfGames = numberOfGames
         self.cache = {}
 

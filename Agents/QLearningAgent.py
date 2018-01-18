@@ -4,8 +4,8 @@ import sys
 
 
 class QLearningAgent(Agent):
-    def __init__(self, learningRate, discountFactor, epsilon):
-        super().__init__()
+    def __init__(self, learningRate, discountFactor, epsilon, collectStatistics=True):
+        super().__init__(collectStatistics)
         self.learningRate = learningRate
         self.discountFactor = discountFactor
         self.epsilon = epsilon
