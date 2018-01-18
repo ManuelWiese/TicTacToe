@@ -6,6 +6,7 @@ from CheckArgs import checkIntBetween
 from CheckArgs import checkTuple
 
 from Game import Game
+from cached import cached
 
 
 class TicTacToe(Game):
@@ -128,25 +129,6 @@ class TicTacToe(Game):
         return TicTacToe.getCell(state, cell) == 0
 
     @staticmethod
-    def setCell(state, cell, marker):
-        assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
-
-        assert checkTuple(cell, int, 2)
-        assert checkIntBetween(cell[0], 0, TicTacToe.size[0])
-        assert checkIntBetween(cell[1], 0, TicTacToe.size[1])
-
-        assert checkIntBetween(marker, 0, 3)
-
-        currentValue = TicTacToe.getCell(state, cell)
-
-        base = len(TicTacToe.markers) ** (cell[1] * TicTacToe.size[0] + cell[0])
-
-        state -= base * currentValue
-        state += base * marker
-
-        return state
-
-    @staticmethod
     def consecutiveInDirection(state, cell, direction):
         assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
 
@@ -177,6 +159,25 @@ class TicTacToe(Game):
                 return counter
 
             counter += 1
+
+    @staticmethod
+    @cached
+    def setCell(state, cell, marker):
+        assert checkIntBetween(state, 0, TicTacToe.numberOfStates)
+
+        assert checkTuple(cell, int, 2)
+        assert checkIntBetween(cell[0], 0, TicTacToe.size[0])
+        assert checkIntBetween(cell[1], 0, TicTacToe.size[1])
+
+        assert checkIntBetween(marker, 0, 3)
+
+        currentValue = TicTacToe.getCell(state, cell)
+
+        base = len(TicTacToe.markers) ** (cell[1] * TicTacToe.size[0] + cell[0])
+
+        state += base * (marker - currentValue)
+
+        return state
 
     @staticmethod
     def maxConsecutive(state, cell):
