@@ -17,7 +17,7 @@ class HumanAgent(Agent):
             return self.getAction(game)
 
 
-    def wasInvalidTurn(self, game, turn):
+    def wasInvalidAction(self, game, turn):
         print("your input '{}' is invalid".format(turn))
         print("Valid moves: {}".format(game.getValidActions()))
 

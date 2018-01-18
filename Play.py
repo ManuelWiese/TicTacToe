@@ -32,7 +32,7 @@ class Play:
                 game.makeMove(action)
 
             except InvalidMoveError:
-                currentPlayer.wasInvalidTurn(game, action)
+                currentPlayer.wasInvalidAction(game, action)
 
         for player in self.players:
             player.endOfGame(game)

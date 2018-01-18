@@ -12,7 +12,7 @@ class Agent:
     def feedbackBeforeTurn(self, game):
         pass
 
-    def wasInvalidTurn(self, game, turn):
+    def wasInvalidAction(self, game, turn):
         print("Invalid move {}".format(turn))
 
     def endOfGame(self, game):
