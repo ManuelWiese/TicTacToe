@@ -3,14 +3,40 @@ import random
 import sys
 
 
+class QFunction:
+    def __init__(self):
+        self.Q = {}
+
+    def getActionToReward(self, game):
+        state = game.getState()
+
+        if state in self.Q:
+            return self.Q[state]
+
+        tmpDir = {}
+        for move in game.getValidActions():
+            tmpDir.update({move: 0})
+        self.Q.update({state: tmpDir})
+
+        return self.Q[state]
+
+    def update(self, state, action, target, learningRate):
+        self.Q[state][action] += learningRate * (target - self.Q[state][action])
+
+
 class QLearningAgent(Agent):
-    def __init__(self, learningRate, discountFactor, epsilon, collectStatistics=True):
+    def __init__(self, learningRate, discountFactor, epsilon, collectStatistics=True, qfunction=None):
         super().__init__(collectStatistics)
         self.learningRate = learningRate
         self.discountFactor = discountFactor
         self.epsilon = epsilon
-        self.Q = {}
-        self.lastMove = None
+
+        if qfunction is None:
+            self.Q = QFunction()
+        else:
+            self.Q = qfunction
+
+        self.lastAction = None
         self.lastState = None
         self.training = True
 
@@ -21,49 +47,37 @@ class QLearningAgent(Agent):
         self.training = training
 
     @staticmethod
-    def getBestMoves(Qstate):
+    def getBestActions(Qstate):
         bestReward = -sys.maxsize
-        bestMoves = []
+        bestActions = []
 
-        for move, reward in Qstate.items():
+        for action, reward in Qstate.items():
             if reward > bestReward:
                 bestReward = reward
-                bestMoves = [move]
+                bestActions = [action]
             elif reward == bestReward:
-                bestMoves.append(move)
+                bestActions.append(action)
 
-        return bestMoves
+        return bestActions
 
     def getAction(self, game):
         super().getAction(game)
 
         state = game.getState()
-        Qstate = self.getQ(game)
+        Qstate = self.Q.getActionToReward(game)
 
         if random.random() < self.epsilon:
-            move = random.choice(list(Qstate))
+            action = random.choice(list(Qstate))
         else:
-            bestMoves = self.getBestMoves(Qstate)
-            move = random.choice(bestMoves)
+            bestActions = self.getBestActions(Qstate)
+            action = random.choice(bestActions)
 
-        self.lastMove = move
+        self.lastAction = action
         self.lastState = state
 
-        assert move in game.getValidActions()
+        assert action in game.getValidActions()
 
-        return move
-
-    def getQ(self, game):
-        state = game.getState()
-
-        if state in self.Q:
-            return self.Q[state]
-
-        tmpDir = {}
-        for move in game.getValidActions():
-            tmpDir.update({move: 0})
-        self.Q.update({state: tmpDir})
-        return self.Q[state]
+        return action
 
     def feedbackBeforeTurn(self, game):
         self.updateQ(game)
@@ -72,26 +86,25 @@ class QLearningAgent(Agent):
         if not self.training:
             return
 
-        if self.lastMove is None:
+        if self.lastAction is None:
             return
 
         reward = game.getScore(self.playerNumber)
 
-        if game.getState() in self.Q:
-            Qstate = self.Q[game.getState()]
-            optimalFutureValue = max(Qstate.values())
+        if len(game.getValidActions()) > 0:
+            Qstate = self.Q.getActionToReward(game)
+            optimalFutureReward = max(Qstate.values())
         else:
-            optimalFutureValue = 0
+            optimalFutureReward = 0
 
-        self.Q[self.lastState][self.lastMove] = ((1 - self.learningRate)
-                                                 * self.Q[self.lastState][self.lastMove]
-                                                 + self.learningRate
-                                                 * (reward + self.discountFactor * optimalFutureValue))
+        target = (reward + self.discountFactor * optimalFutureReward)
+
+        self.Q.update(self.lastState, self.lastAction, target, self.learningRate)
 
     def endOfGame(self, game):
         super().endOfGame(game)
 
         self.updateQ(game)
 
-        self.lastMove = None
+        self.lastAction = None
         self.lastState = None

@@ -28,7 +28,6 @@ class Simulation:
 
     def playGame(self, shufflePlayers = True):
         if shufflePlayers:
-            # TODO: how can we avoid this?
             random.shuffle(self.players)
 
         game = self.GameClass()
@@ -38,8 +37,8 @@ class Simulation:
 
             currentPlayer.feedbackBeforeTurn(game)
 
+            action = currentPlayer.getAction(game)
             try:
-                action = currentPlayer.getAction(game)
                 game.makeMove(action)
 
             except InvalidMoveError:
@@ -59,7 +58,11 @@ class Simulation:
 
 
 if __name__ == "__main__":
-    players = [QLearningAgent(0.1, 1, 1.0), MonteCarloAgent(1000)]
+    from Agents.QLearningAgent import QFunction
+
+    q = QFunction()
+
+    players = [QLearningAgent(1.0, 1.0, 1.0, qfunction=q), QLearningAgent(1.0, 1.0, 1.0, qfunction=q)]
 
     simulation = Simulation(TicTacToe, players)
 
@@ -68,6 +71,7 @@ if __name__ == "__main__":
     for i, epsilon in enumerate([1.0 - k / n for k in range(n + 1)]):
 
         players[0].setEpsilon(epsilon)
+        players[1].setEpsilon(epsilon)
 
         print("Result after {} * {} runs,".format(i + 1, runs)
               + " current epsilon = {}".format(epsilon))
@@ -75,3 +79,8 @@ if __name__ == "__main__":
         simulation.simulate(runs)
         print(players[0].getStatistics())
         players[0].resetStatistics()
+
+    players[1] = MonteCarloAgent(1000)
+
+    simulation.simulate(runs)
+    print(players[0].getStatistics())
