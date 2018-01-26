@@ -17,6 +17,8 @@ from Game import Game
 from TicTacToe import TicTacToe
 import copy
 
+from utils.FloatRange import FloatRange
+
 
 class Simulation:
     def __init__(self, GameClass, players):
@@ -62,13 +64,14 @@ if __name__ == "__main__":
 
     q = QFunction()
 
-    players = [QLearningAgent(1.0, 1.0, 1.0, qfunction=q), QLearningAgent(1.0, 1.0, 1.0, qfunction=q)]
+    players = [QLearningAgent(0.1, 1.0, 1.0, qfunction=q), QLearningAgent(0.1, 1.0, 1.0, qfunction=q)]
 
     simulation = Simulation(TicTacToe, players)
 
-    n = 1000
-    runs = 1000
-    for i, epsilon in enumerate([1.0 - k / n for k in range(n + 1)]):
+    n = 10000
+    step = -1/n
+    runs = 100
+    for i, epsilon in enumerate(FloatRange(1.0, 0.0 + step, step)):
 
         players[0].setEpsilon(epsilon)
         players[1].setEpsilon(epsilon)
@@ -79,8 +82,3 @@ if __name__ == "__main__":
         simulation.simulate(runs)
         print(players[0].getStatistics())
         players[0].resetStatistics()
-
-    players[1] = MonteCarloAgent(1000)
-
-    simulation.simulate(runs)
-    print(players[0].getStatistics())
