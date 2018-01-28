@@ -4,8 +4,10 @@ import random
 import pickle
 import datetime
 import pygame
-
+import matplotlib.pyplot as plt
 #
+import sys
+
 POPULATION = 150
 DELTA_DISJOINT = 2.0
 DELTA_WEIGHTS = 0.4
@@ -627,10 +629,12 @@ class Pool:
             self.innovation = outputs
             self.currentSpecies = 0
             self.currentGenome = 0
-            self.maxFitness = 0
+            self.maxFitness = -sys.maxsize
             self.population = population
             self.inputs = inputs
             self.outputs = outputs
+
+            self.bestGenomeOfGeneration = []
 
             for i in range(self.population):
                 self.addToSpecies(Genome.basicGenome(self))
@@ -765,6 +769,10 @@ class Pool:
 
     def nextGenome(self):
         currentGenomes = self.species[self.currentSpecies].genomes
+
+        if currentGenomes[self.currentGenome].fitness > self.maxFitness:
+            self.maxFitness = currentGenomes[self.currentGenome].fitness
+
         print(self.currentSpecies, self.currentGenome,
               currentGenomes[self.currentGenome].fitness, self.maxFitness)
         self.currentGenome += 1
@@ -775,4 +783,25 @@ class Pool:
                 self.currentSpecies = 0
                 if self.generation % 10 == 0:
                     self.save()
+                self.setBestGenomeOfLastGeneration()
                 self.newGeneration()
+
+    def setBestGenomeOfLastGeneration(self):
+        bestFitness = -sys.maxsize
+        bestGenome = None
+        for spec in self.species:
+            for genome in spec.genomes:
+                if genome.fitness > bestFitness:
+                    bestFitness = genome.fitness
+                    bestGenome = genome
+
+        self.bestGenomeOfGeneration.append(bestGenome)
+
+    def plotBestGenomeOfGeneration(self):
+        fitness = [genome.fitness for genome in self.bestGenomeOfGeneration]
+
+        # fig, ax = plt.subplots()
+        plt.plot(fitness, '-o', ms=20, lw=2, alpha=0.7, mfc='orange')
+        plt.grid()
+
+        plt.show()

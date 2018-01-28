@@ -11,6 +11,9 @@ from cached import cached
 
 class TicTacToe(Game):
     PLAYERCOUNT = 2
+    ACTION_SPACE = [(i, j) for i in range(3) for j in range(3)]
+    ACTION_SPACE_SIZE = len(ACTION_SPACE)
+    OBSERVATION_SIZE = 9
 
     PLAYER1 = 0
     PLAYER2 = 1
@@ -40,9 +43,9 @@ class TicTacToe(Game):
 
         return copied
 
-    @staticmethod
-    def getPlayerCount():
-        return TicTacToe.PLAYERCOUNT
+    @classmethod
+    def getPlayerCount(cls):
+        return cls.PLAYERCOUNT
 
     def makeMove(self, cell):
         assert checkTuple(cell, int, 2)
@@ -65,8 +68,24 @@ class TicTacToe(Game):
     def getGameStatus(self):
         return TicTacToe.gameStatus[self.state]
 
+    @classmethod
+    def getActionSpace(cls):
+        return cls.ACTION_SPACE
+
+    @classmethod
+    def getActionSpaceSize(cls):
+        return cls.ACTION_SPACE_SIZE
+
     def getValidActions(self):
         return TicTacToe.validMoves[self.state]
+
+    @classmethod
+    def getObservationSize(cls):
+        return cls.OBSERVATION_SIZE
+
+    def getObservation(self):
+        board = TicTacToe.stateToBoard(self.state)
+        return [cell for line in board for cell in line]
 
     def getState(self):
         return self.state

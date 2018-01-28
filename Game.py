@@ -7,8 +7,8 @@ class Game:
         raise NotImplementedError
 
     # TODO: games with variable number of players?
-    @staticmethod
-    def getPlayerCount():
+    @classmethod
+    def getPlayerCount(cls):
         raise NotImplementedError
 
     def makeMove(self, move):
@@ -20,7 +20,22 @@ class Game:
     def getGameStatus(self):
         raise NotImplementedError
 
+    @classmethod
+    def getActionSpace(cls):
+        raise NotImplementedError
+
+    @classmethod
+    def getActionSpaceSize(cls):
+        raise NotImplementedError
+
     def getValidActions(self):
+        raise NotImplementedError
+
+    @classmethod
+    def getObservationSize(cls):
+        raise NotImplementedError
+
+    def getObservation(self):
         raise NotImplementedError
 
     def getState(self):

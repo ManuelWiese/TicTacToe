@@ -1,5 +1,6 @@
 import random
 
+from Agents.NeatAgent import NeatAgent
 from InvalidMoveError import InvalidMoveError
 
 from Agents.Agent import Agent
@@ -60,25 +61,26 @@ class Simulation:
 
 
 if __name__ == "__main__":
-    from Agents.QLearningAgent import QFunction
-
-    q = QFunction()
-
-    players = [QLearningAgent(0.1, 1.0, 1.0, qfunction=q), QLearningAgent(0.1, 1.0, 1.0, qfunction=q)]
+    runsPerGenome = 1000
+    players = [NeatAgent(TicTacToe, runsPerGenome), RandomAgent()]
 
     simulation = Simulation(TicTacToe, players)
 
-    n = 10000
-    step = -1/n
-    runs = 100
-    for i, epsilon in enumerate(FloatRange(1.0, 0.0 + step, step)):
+    runs = 150 * 200
+    for _ in range(runs):
 
-        players[0].setEpsilon(epsilon)
-        players[1].setEpsilon(epsilon)
-
-        print("Result after {} * {} runs,".format(i + 1, runs)
-              + " current epsilon = {}".format(epsilon))
-
-        simulation.simulate(runs)
+        simulation.simulate(runsPerGenome)
         print(players[0].getStatistics())
         players[0].resetStatistics()
+
+    players[0].setTraining(False)
+    simulation = Simulation(TicTacToe, [players[0], RandomAgent()])
+    simulation.simulate(runsPerGenome*10)
+
+    print(players[0].getStatistics())
+
+    players[0].pool.plotBestGenomeOfGeneration()
+
+    while True:
+        # pass
+        players[0].pool.bestGenomeOfGeneration[-1].plotNetwork()
