@@ -1,7 +1,6 @@
 .ropeproject
 *.pyc
 __pycache__
-venv
+venv*
 .idea
 .floo
-.flooignore
